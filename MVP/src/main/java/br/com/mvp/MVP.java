@@ -2,17 +2,21 @@ package br.com.mvp;
 
 import javax.swing.JPanel;
 
-public class MVP<V extends JPanel, M> {
+import br.com.mvp.instrument.Instrumentator;
+import br.com.mvp.view.annotation.View;
+
+public class MVP<V extends JPanel> {
 	
-	public Controller<V, M> createController(Class<V> viewClass, Class<M> modelClass) throws Exception{
+	public Controller<V, ?> createController(Class<V> viewClass) throws Exception{
+		View view = viewClass.getAnnotation(View.class);
 		
-		Instrumentator<M> modelInst = InstrumentatorFactory.create(modelClass);
-		M model = modelInst.get();
+		if (view.model() == Class.class)
+			throw new Exception("No models found for view " + viewClass.getName());
 		
-		Instrumentator<V> viewInst = InstrumentatorFactory.create(viewClass, modelInst.getScanner());
-		V view = viewInst.get();
-		
-		Controller<V, M> controller = new ControllerImpl<>(view, model);		
-		return controller;
+		Instrumentator<?> instrumentator = InstrumentatorFactory.createModel(view.model());
+		instrumentator.instrument();
+		instrumentator.getInstrumentedInstance();
+		return null;
+			
 	}
 }

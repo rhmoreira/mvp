@@ -10,7 +10,7 @@ import javax.swing.DefaultListModel;
 
 import br.com.mvp.view.ModelCollector;
 
-@ViewComponent
+@View
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface List {

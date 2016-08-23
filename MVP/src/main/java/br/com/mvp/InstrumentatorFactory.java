@@ -1,42 +1,36 @@
-	package br.com.mvp;
+package br.com.mvp;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPanel;
-
+import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.model.ModelInstrumentator;
-import br.com.mvp.view.ViewInstrumentator;
-import javassist.ClassPool;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"unchecked"})
 final class InstrumentatorFactory {
 
-	public static final ClassPool CP = ClassPool.getDefault();
+	private enum Type{
+		MODEL,
+		VIEW;
+	}
 	
 	private static Map<Class<?>, Instrumentator<?>> instrumentatorCacheMap = new HashMap<>();
 	
-	
 	private InstrumentatorFactory() {}
 	
-	public static <T> Instrumentator<T> create(Class<T> instrumentedClass) throws Exception{
-		return create0(InstrumentatorType.MODEL, instrumentedClass, null);
+	public static <T> Instrumentator<T> createModel(Class<T> clazz) throws Exception{
+		return create0(Type.MODEL, clazz);
 	}
 	
-	public static <T extends JPanel> Instrumentator<T> create(Class<T> instrumentedClass, ComponentScanner scanner) throws Exception{
-		return create0(InstrumentatorType.VIEW, instrumentedClass, scanner);
-	}
-	
-	private static <T> Instrumentator<T> create0(InstrumentatorType type, Class<T> instrumentedClass, ComponentScanner scanner) throws Exception{
+	private static <T> Instrumentator<T> create0(Type type, Class<T> instrumentedClass) throws Exception{
 		Instrumentator<?> instrumentator = instrumentatorCacheMap.get(instrumentedClass);
 		if (instrumentator == null){
 			switch (type) {
 			case MODEL:
-				instrumentator = new ModelInstrumentator<T>(CP, instrumentedClass);
+				instrumentator = new ModelInstrumentator<T>(Instrumentator.classPool.get(instrumentedClass.getName()));
 				break;
-			case VIEW:
-				instrumentator = new ViewInstrumentator(CP, instrumentedClass, scanner);
-				break;
+			default:
+				instrumentator = null;
 			}
 			instrumentatorCacheMap.put(instrumentedClass, instrumentator);
 		}
