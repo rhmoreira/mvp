@@ -1,4 +1,4 @@
-package br.com.mvp.view;
+package br.com.mvp;
 
 public interface ComponentBind {
 

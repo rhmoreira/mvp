@@ -16,6 +16,14 @@ public class Util {
 	}
 	
 	public static String generateSetterMethodName(String str){
-		return "set" + capitalize(str);
+		return appendPrefixAndCapitalize("set", str);
+	}
+	
+	public static String generateGetterMethodName(String str){
+		return appendPrefixAndCapitalize("get", str);
+	}
+	
+	private static String appendPrefixAndCapitalize(String prefix, String str){
+		return prefix + capitalize(str);
 	}
 }
