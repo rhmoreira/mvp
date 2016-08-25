@@ -1,5 +1,8 @@
 package br.com.mvp;
 
+import javassist.util.proxy.ProxyFactory;
+
+@SuppressWarnings("unchecked")
 public class Util {
 
 
@@ -23,7 +26,22 @@ public class Util {
 		return appendPrefixAndCapitalize("get", str);
 	}
 	
+	public static String generatePrimitiveBooleanGetterMethodName(String str){
+		return appendPrefixAndCapitalize("is", str);
+	}
+	
 	private static String appendPrefixAndCapitalize(String prefix, String str){
 		return prefix + capitalize(str);
+	}
+	
+	public static <T> Class<? super T> getProxiedClass(T instance){
+		return getProxiedClass((Class<T>)instance.getClass());
+	}
+	
+	public static <T> Class<? super T> getProxiedClass(Class<T> clazz){
+		if (ProxyFactory.isProxyClass(clazz))
+			return clazz.getSuperclass();
+		else
+			return clazz;
 	}
 }

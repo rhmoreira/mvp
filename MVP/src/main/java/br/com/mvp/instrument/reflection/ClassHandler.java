@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 public class ClassHandler {
 
 	private Class<?> clazz;
 	private Class<?> topLevelClass;
 	private MemberHandler memberHandler;
+	private Injector injector = new InjectorImpl();
 	
 	private ClassMemberFilter filter;
 	
@@ -41,6 +43,14 @@ public class ClassHandler {
 		return Collections.unmodifiableCollection(memberHandler.getScannedMethods());
 	}
 	
+	public Map<String, Field> getMappedFields() {
+		return Collections.unmodifiableMap(memberHandler.getMappedFields());
+	}
+	
+	public Map<String, Method> getMappedMethods() {
+		return Collections.unmodifiableMap(memberHandler.getMappedMethods());
+	}
+	
 	public void scan() throws Exception{
 		if (filter.accept(clazz))
 			mapClass(clazz);
@@ -50,21 +60,29 @@ public class ClassHandler {
 		if (!clazz.equals(topLevelClass)){
 			mapClass(clazz.getSuperclass());
 
-			memberHandler.mapFields(clazz);
-			memberHandler.mapGetterAndSetterMethods(clazz);
+			Field[] fields = memberHandler.mapFields(clazz);
+			memberHandler.mapGettersAndSetters(fields);
 		}
+	}
+	
+	public ClassMemberFilter getFilter(){
+		return filter;
 	}
 	
 	private class SimpleFilter implements ClassMemberFilter{
 
-		public boolean accept(Class<?> clazz) throws Exception {
+		public boolean accept(Class<?> clazz){
 			return true;
 		}
-		public boolean accept(Field ctField) throws Exception {
+		public boolean accept(Field ctField){
 			return true;
 		}
-		public boolean accept(Method ctMethod) throws Exception {
+		public boolean accept(Method ctMethod){
 			return true;
 		}
+	}
+
+	public Injector getInjector() {
+		return injector;
 	}
 }

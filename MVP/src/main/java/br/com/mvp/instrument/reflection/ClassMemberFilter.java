@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 public interface ClassMemberFilter {
 
-	boolean accept(Class<?> clazz) throws Exception;
-	boolean accept(Field field) throws Exception;
-	boolean accept(Method method) throws Exception;
+	boolean accept(Class<?> clazz);
+	boolean accept(Field field);
+	boolean accept(Method method);
 }

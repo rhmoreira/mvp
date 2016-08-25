@@ -11,12 +11,12 @@ import br.com.mvp.view.annotation.View;
 class ModelClassFilter implements ClassMemberFilter{
 
 		@Override
-		public boolean accept(Class<?> clazz) throws Exception {
+		public boolean accept(Class<?> clazz) {
 			return clazz.getAnnotation(Model.class) != null;
 		}
 
 		@Override
-		public boolean accept(Field field) throws Exception {
+		public boolean accept(Field field) {
 			for (Annotation a: field.getAnnotations())
 				if (((Annotation)a).annotationType().isAnnotationPresent(View.class))
 					return true;
@@ -26,7 +26,7 @@ class ModelClassFilter implements ClassMemberFilter{
 		}
 
 		@Override
-		public boolean accept(Method method) throws Exception {
+		public boolean accept(Method method) {
 			return method.getName().startsWith("set")
 					|| method.getName().startsWith("get");
 		}		
