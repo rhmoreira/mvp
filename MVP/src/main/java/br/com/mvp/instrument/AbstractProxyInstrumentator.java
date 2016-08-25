@@ -16,6 +16,7 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		
 	protected Class<T> clazz;
 	private ClassHandler classHandler;
+	private boolean setup;
 	
 	public AbstractProxyInstrumentator(Class<T> clazz) throws Exception{
 		this(clazz, 
@@ -37,8 +38,9 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		classHandler.scan();
 	}
 	
-	protected void createProxy(){
+	protected InterfaceInstrumentator<T> createProxy(){
 		proxy.setSuperclass(clazz);
+		return this;
 	}
 	
 	@Override
@@ -68,10 +70,16 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		Class<T> proxyClass = (Class<T>) proxy.createClass();
 		T newInstance = proxyClass.newInstance();
 		((ProxyObject)newInstance).setHandler(mHandler);
+		
+		setup = true;
 		return newInstance;
 	}
 	
 	public ClassHandler getClassHandler() {
 		return classHandler;
+	}
+	
+	protected boolean isSetup() {
+		return setup;
 	}
 }
