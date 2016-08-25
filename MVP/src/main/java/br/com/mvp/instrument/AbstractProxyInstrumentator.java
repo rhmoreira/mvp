@@ -79,10 +79,6 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		return classHandler;
 	}
 	
-	protected InstrumentatorCache getCache(){
-		return InstrumentatorCache.getInstance();
-	}
-
 	protected boolean isSetup() {
 		return setup;
 	}

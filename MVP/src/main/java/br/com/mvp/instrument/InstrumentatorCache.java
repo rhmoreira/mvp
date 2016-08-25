@@ -7,12 +7,7 @@ import java.util.Map;
 class InstrumentatorCache {
 
 	private static Map<Class<?>, Instrumentator<?>> instrumentatorCacheMap = new HashMap<>();
-	private static InstrumentatorCache instance = new InstrumentatorCache();
 	private InstrumentatorCache(){}
-	
-	public static InstrumentatorCache getInstance(){
-		return instance;
-	}
 	
 	public static <T> void write(Class<T> clazz, Instrumentator<T> instrumentator){
 		instrumentatorCacheMap.put(clazz, instrumentator);
