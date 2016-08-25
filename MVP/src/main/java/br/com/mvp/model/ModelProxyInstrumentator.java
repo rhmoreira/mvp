@@ -42,7 +42,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 		M instance = super.newInstance(methodHandler);
 		
 		Injector injector = classHandler.getInjector();
-		injector.injectInstrumented(instance, clazz, dependencyMap);
+		injector.inject(instance, dependencyMap);
 		
 		return instance;
 	}
