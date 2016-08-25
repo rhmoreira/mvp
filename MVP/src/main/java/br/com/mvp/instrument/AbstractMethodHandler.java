@@ -22,7 +22,9 @@ public abstract class AbstractMethodHandler implements MethodHandler {
 	@Override
 	public final Object invoke(Object instance, Method method, Method proceed, Object[] args) throws Throwable {
 		Boolean handled = handledMethodNamesMap.get(method.getName());
-		if (handled != null && handled)
+		if ( (handled != null && handled)
+				|| method.isBridge()
+				|| method.isSynthetic())
 			return proceed.invoke(instance, args);
 		else
 			return doInvoke(instance, method, proceed, args);
