@@ -41,18 +41,15 @@ public class MemberHandler {
 			String setterMethod = Util.generateSetterMethodName(field.getName());
 			mapMethod(declaringClass, setterMethod, new Class[]{field.getType()}, field.getName());
 			
-			String getterMethod = 
-					field.getType().isPrimitive() && field.getType() == boolean.class ?
-						Util.generatePrimitiveBooleanGetterMethodName(field.getName()):
-						Util.generateGetterMethodName(field.getName());
+			String getterMethod = generateGetterMethodName(field);
 			mapMethod(declaringClass, getterMethod, new Class[]{}, field.getName());
 		}
 	}
-	
+
 	private void mapMethod(Class<?> clazz, String methodName, Class<?>[] parameter, String fieldName) throws Exception{
 		Method declaredMethod = clazz.getDeclaredMethod(methodName, parameter);			
 		if (filter.accept(declaredMethod))
-			methodMap.put(fieldName + ":" + methodName, declaredMethod);
+			methodMap.put(methodName, declaredMethod);
 	}
 
 	protected Collection<Field> getScannedFields() {
@@ -69,5 +66,33 @@ public class MemberHandler {
 	
 	protected Map<String, Method> getMappedMethods() {
 		return methodMap;
+	}
+	
+	public Method setterMethodForField(Field field){
+		String setterMethodName = Util.generateSetterMethodName(field.getName());
+		Method setterMethod = methodMap.get(setterMethodName);
+		return setterMethod;
+	}
+	
+	public Method getterMethodForField(Field field){
+		String getterMethodName = generateGetterMethodName(field);
+		Method getterMethod = methodMap.get(getterMethodName);
+		return getterMethod;
+	}
+	
+	private String generateGetterMethodName(Field field) {
+		String getterMethod = 
+				field.getType().isPrimitive() && field.getType() == boolean.class ?
+					Util.generatePrimitiveBooleanGetterMethodName(field.getName()):
+					Util.generateGetterMethodName(field.getName());
+		return getterMethod;
+	}
+
+	public boolean isMethodMapped(Method method) {
+		Method mappedMethod = getMappedMethods().get(method.getName());
+		if (mappedMethod != null && mappedMethod.equals(method))
+			return true;
+		else
+			return false;
 	}
 }

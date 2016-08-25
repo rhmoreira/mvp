@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
+import br.com.mvp.model.BindingModel;
 import br.com.mvp.view.annotation.View;
 
 @SuppressWarnings("unchecked")
@@ -20,6 +21,8 @@ public class MVP<V extends JPanel> {
 		M newInstance = instrumentator
 								.setupProxy()
 								.newInstance();
+		
+		BindingModel binder = (BindingModel) newInstance;
 		return new ControllerImpl<V, M>(null, newInstance);
 			
 	}

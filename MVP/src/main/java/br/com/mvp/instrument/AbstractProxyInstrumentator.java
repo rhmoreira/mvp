@@ -2,17 +2,13 @@ package br.com.mvp.instrument;
 
 import br.com.mvp.instrument.reflection.ClassHandler;
 import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T>, InterfaceInstrumentator<T>, MethodInstrumentator<T> {
 
-	private static final ProxyFactory proxy = new ProxyFactory();
-	static{
-		proxy.setUseCache(true);
-	}
+	private ProxyFactory proxy = new ProxyFactory();
 		
 	protected Class<T> clazz;
 	private ClassHandler classHandler;
@@ -28,6 +24,7 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		super();
 		this.clazz = clazz;
 		this.classHandler = classHandler;
+		proxy.setUseCache(true);
 		
 		mapClass();
 		
@@ -66,10 +63,10 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 	}
 
 	@Override
-	public T newInstance(MethodHandler mHandler) throws Exception {
+	public T newInstance(ProxyInvocationHandler... handlers) throws Exception {
 		Class<T> proxyClass = (Class<T>) proxy.createClass();
 		T newInstance = proxyClass.newInstance();
-		((ProxyObject)newInstance).setHandler(mHandler);
+		((ProxyObject)newInstance).setHandler(new DefaultMethodHandler(handlers));
 		
 		setup = true;
 		return newInstance;

@@ -2,7 +2,6 @@ package br.com.mvp.instrument;
 
 import br.com.mvp.model.BindingModel;
 import br.com.mvp.model.ModelProxyInstrumentator;
-import br.com.mvp.view.ViewProxyInstrumentator;
 
 public final class InstrumentatorFactory {
 
@@ -31,9 +30,6 @@ public final class InstrumentatorFactory {
 			switch (type) {
 			case MODEL:
 				instrumentator = new ModelProxyInstrumentator<T>(proxiedClass);
-				break;
-			case VIEW:
-				instrumentator = new ViewProxyInstrumentator<T>(proxiedClass, bindingModel);
 				break;
 			default:
 				instrumentator = null;

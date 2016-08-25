@@ -12,6 +12,7 @@ public class ClassHandler {
 	private Class<?> topLevelClass;
 	private MemberHandler memberHandler;
 	private Injector injector = new InjectorImpl();
+	private DependencyMapperImpl dependencyMapper = new DependencyMapperImpl(this);
 	
 	private ClassMemberFilter filter;
 	
@@ -52,8 +53,10 @@ public class ClassHandler {
 	}
 	
 	public void scan() throws Exception{
-		if (filter.accept(clazz))
+		if (filter.accept(clazz)){
 			mapClass(clazz);
+			dependencyMapper.mapModelDependencies();
+		}
 	}
 	
 	private void mapClass(Class<?> clazz) throws Exception {
@@ -84,5 +87,13 @@ public class ClassHandler {
 
 	public Injector getInjector() {
 		return injector;
+	}
+	
+	public DependencyMapper getDependencyMapper() {
+		return dependencyMapper;
+	}
+	
+	public MemberHandler getMemberHandler() {
+		return memberHandler;
 	}
 }

@@ -1,6 +1,7 @@
 package br.com.mvp.instrument.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,10 @@ import br.com.mvp.instrument.InstrumentatorFactory;
 
 class InjectorImpl implements Injector {
 
+	@Override
+	public void inject(Object target, Object value, Method setter) throws Exception {
+		setter.invoke(target, value);
+	}
 	
 	@Override
 	public void inject(Object target, Object value, Field field) throws Exception {
@@ -20,7 +25,7 @@ class InjectorImpl implements Injector {
 	}
 
 	@Override
-	public void inject(Object target, Map<Field, Class<?>> dependencyMap) throws Exception {
+	public void inject(Object target, Map<Field, Class<?>> dependencyMap, MemberHandler memberHandler) throws Exception {
 		Map<Class<?>, Object> instanceCacheL1 = new HashMap<>();
 		
 		instanceCacheL1.put(Util.getProxiedClass(target), target);
@@ -36,12 +41,10 @@ class InjectorImpl implements Injector {
 						dependencyInstance = instrumentator.setupProxy().newInstance();
 						instanceCacheL1.put(entry.getValue(), dependencyInstance);
 					}
-					inject(target, dependencyInstance, entry.getKey());
+					inject(target, dependencyInstance, memberHandler.setterMethodForField(entry.getKey()));
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
-		
 	}
-
 }

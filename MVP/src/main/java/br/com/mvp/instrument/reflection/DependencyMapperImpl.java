@@ -1,4 +1,4 @@
-package br.com.mvp.model;
+package br.com.mvp.instrument.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -6,21 +6,22 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import br.com.mvp.Util;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
-import br.com.mvp.instrument.reflection.ClassHandler;
-import br.com.mvp.instrument.reflection.ClassMemberFilter;
 
-class ModelDependencyMapper {
+class DependencyMapperImpl implements DependencyMapper{
 
 	private ClassHandler classHandler;
+	private Map<Field, Class<?>> dependencyMap;
+	private Collection<Class<?>> dependencyClasses;
 
-	public ModelDependencyMapper(ClassHandler classHandler) {
+	public DependencyMapperImpl(ClassHandler classHandler) {
 		super();
 		this.classHandler = classHandler;
 	}
 	
-	public Map<Field, Class<?>> mapModelDependencies() {
+	public void mapModelDependencies() {
 		Map<Field, Class<?>> dependencyMap = filterModelClasses();
 		
 		dependencyMap.forEach( (f, c) -> {
@@ -31,7 +32,19 @@ class ModelDependencyMapper {
 			catch (Exception e) {}
 		});
 		
-		return dependencyMap;		
+		this.dependencyMap = dependencyMap;
+		dependencyClasses = dependencyMap.values();
+	}
+	
+	@Override
+	public boolean isDependency(Class<?> modelClass) {
+		Class<?> proxiedClass = Util.getProxiedClass(modelClass);
+		return dependencyClasses.contains(proxiedClass);
+	}
+	
+	@Override
+	public Map<Field, Class<?>> getDependencies() {
+		return dependencyMap;
 	}
 	
 	private Map<Field, Class<?>> filterModelClasses(){
