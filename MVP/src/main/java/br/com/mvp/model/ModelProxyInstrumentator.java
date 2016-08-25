@@ -26,8 +26,9 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 	@Override
 	public Instrumentator<M> setupProxy() {
 		if (!isSetup()){
-			createProxy();
-			return setInterfaces(BindingModel.class).useDefaultFilter();
+			return createProxy()
+					.setInterfaces(BindingModel.class)
+					.useDefaultFilter();
 		}else
 			return this;
 	}

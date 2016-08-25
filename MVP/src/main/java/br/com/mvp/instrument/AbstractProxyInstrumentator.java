@@ -38,8 +38,9 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		classHandler.scan();
 	}
 	
-	protected void createProxy(){
+	protected InterfaceInstrumentator<T> createProxy(){
 		proxy.setSuperclass(clazz);
+		return this;
 	}
 	
 	@Override
