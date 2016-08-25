@@ -20,7 +20,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 	
 	private void mapModelDependencies(){
 		ModelDependencyMapper dependencyMapper = new ModelDependencyMapper(getClassHandler());
-		dependencyMap = dependencyMapper.mapDependencies();
+		dependencyMap = dependencyMapper.mapModelDependencies();
 	}
 	
 	@Override

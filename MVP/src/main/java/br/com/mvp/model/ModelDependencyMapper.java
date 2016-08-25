@@ -20,7 +20,7 @@ class ModelDependencyMapper {
 		this.classHandler = classHandler;
 	}
 	
-	public Map<Field, Class<?>> mapDependencies() {
+	public Map<Field, Class<?>> mapModelDependencies() {
 		Map<Field, Class<?>> dependencyMap = filterModelClasses();
 		
 		dependencyMap.forEach( (f, c) -> {
