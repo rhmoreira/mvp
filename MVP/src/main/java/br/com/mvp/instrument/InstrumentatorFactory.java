@@ -34,6 +34,7 @@ public final class InstrumentatorFactory {
 				break;
 			case VIEW:
 				instrumentator = new ViewProxyInstrumentator<T>(proxiedClass, bindingModel);
+				break;
 			default:
 				instrumentator = null;
 			}
