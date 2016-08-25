@@ -9,11 +9,8 @@ import javassist.util.proxy.ProxyObject;
 @SuppressWarnings("unchecked")
 public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T>, InterfaceInstrumentator<T>, MethodInstrumentator<T> {
 
-	private static final ProxyFactory proxy = new ProxyFactory();
-	static{
-		proxy.setUseCache(true);
-	}
-		
+	private final ProxyFactory proxy = new ProxyFactory();
+
 	protected Class<T> clazz;
 	private ClassHandler classHandler;
 	private boolean setup;
@@ -28,6 +25,7 @@ public abstract class AbstractProxyInstrumentator<T> implements Instrumentator<T
 		super();
 		this.clazz = clazz;
 		this.classHandler = classHandler;
+		proxy.setUseCache(true);
 		
 		mapClass();
 		
