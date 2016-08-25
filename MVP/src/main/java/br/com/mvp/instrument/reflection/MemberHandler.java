@@ -2,14 +2,14 @@ package br.com.mvp.instrument.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import br.com.mvp.Util;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
 
 public class MemberHandler {
 
@@ -23,22 +23,29 @@ public class MemberHandler {
 		this.filter = filter;
 	}
 
-	protected void mapFields(Class<?> clazz) throws Exception{
+	protected Field[] mapFields(Class<?> clazz) throws Exception{
 		Field[] declaredCtFields = clazz.getDeclaredFields();
-		for (int i = 0; i<declaredCtFields.length; i++){
-			if (filter.accept(declaredCtFields[i])){
-				fieldMap.put(declaredCtFields[i].getName(), declaredCtFields[i]);
-			}
-		}
+		Map<String, Field> filteredFields = 
+			Arrays.stream(declaredCtFields)
+				  .filter(f -> filter.accept(f))
+				  .collect(Collectors.toMap((Function<Field,String>) f -> f.getName(), (Function<Field,Field>) f -> f));
+		
+		fieldMap.putAll(filteredFields);
+		return declaredCtFields;
 	}
 	
-	protected void mapGetterAndSetterMethods(Class<?> clazz) throws Exception{
+	protected void mapGettersAndSetters(Field[] acceptedFields) throws Exception{
 		for (Field field: fieldMap.values()){
-			String setterMethod = Util.generateSetterMethodName(field.getName());
-			mapMethod(clazz, setterMethod, new Class[]{field.getType()}, field.getName());
+			Class<?> declaringClass = field.getDeclaringClass();
 			
-			String getterMethod = Util.generateGetterMethodName(field.getName());
-			mapMethod(clazz, getterMethod, new Class[]{}, field.getName());
+			String setterMethod = Util.generateSetterMethodName(field.getName());
+			mapMethod(declaringClass, setterMethod, new Class[]{field.getType()}, field.getName());
+			
+			String getterMethod = 
+					field.getType().isPrimitive() && field.getType() == boolean.class ?
+						Util.generatePrimitiveBooleanGetterMethodName(field.getName()):
+						Util.generateGetterMethodName(field.getName());
+			mapMethod(declaringClass, getterMethod, new Class[]{}, field.getName());
 		}
 	}
 	
@@ -48,11 +55,19 @@ public class MemberHandler {
 			methodMap.put(fieldName + ":" + methodName, declaredMethod);
 	}
 
-	public Collection<Field> getScannedFields() {
+	protected Collection<Field> getScannedFields() {
 		return fieldMap.values();
 	}
 	
-	public Collection<Method> getScannedMethods() {
+	protected Map<String, Field> getMappedFields() {
+		return fieldMap;
+	}
+	
+	protected Collection<Method> getScannedMethods() {
 		return methodMap.values();
+	}
+	
+	protected Map<String, Method> getMappedMethods() {
+		return methodMap;
 	}
 }

@@ -23,6 +23,10 @@ public class Util {
 		return appendPrefixAndCapitalize("get", str);
 	}
 	
+	public static String generatePrimitiveBooleanGetterMethodName(String str){
+		return appendPrefixAndCapitalize("is", str);
+	}
+	
 	private static String appendPrefixAndCapitalize(String prefix, String str){
 		return prefix + capitalize(str);
 	}
