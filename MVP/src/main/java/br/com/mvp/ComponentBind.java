@@ -1,6 +1,10 @@
 package br.com.mvp;
 
+import java.awt.Component;
+
 public interface ComponentBind {
 
-	void setValue(Object value);
+	public String getComponentDeclaredFieldName();
+	public String getComponentName();
+	public Component getComponent();
 }

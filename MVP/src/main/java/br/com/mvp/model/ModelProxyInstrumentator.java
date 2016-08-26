@@ -10,7 +10,7 @@ import br.com.mvp.instrument.reflection.Injector;
 public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 
 	public ModelProxyInstrumentator(Class<M> modelClass) throws Exception{
-		super(modelClass, new ModelClassHandler(modelClass, Object.class));
+		super(modelClass, new ModelClassHandler(modelClass));
 	}
 	
 	@Override
@@ -28,7 +28,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 		ClassHandler classHandler = getClassHandler();
 		
 		ProxyInvocationHandler viewModelSyncHandler = 
-				new ViewModelSyncInvocationHandler(classHandler);
+				new BindingModelInvocationHandler(classHandler);
 		
 		ProxyInvocationHandler modelProxyatorHandler = 
 				new ModelProxyatorInvocationHandler(classHandler);

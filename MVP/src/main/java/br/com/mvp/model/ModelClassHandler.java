@@ -4,7 +4,7 @@ import br.com.mvp.instrument.reflection.ClassHandler;
 
 public class ModelClassHandler extends ClassHandler{
 
-	public ModelClassHandler(Class<?> clazz, Class<?> topLevelClass) throws Exception {
-		super(clazz, topLevelClass, new ModelClassFilter());
+	public ModelClassHandler(Class<?> clazz) throws Exception {
+		super(clazz, Object.class, new ModelClassFilter());
 	}
 }
