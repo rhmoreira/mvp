@@ -39,9 +39,20 @@ public class Util {
 	}
 	
 	public static <T> Class<? super T> getProxiedClass(Class<T> clazz){
-		if (ProxyFactory.isProxyClass(clazz))
+		if (clazz == null)
+			return clazz;
+		
+		if (isProxiedClass(clazz))
 			return clazz.getSuperclass();
 		else
 			return clazz;
 	}
+	
+	public static <T> boolean isProxiedClass(Class<T> clazz){
+		if (clazz == null)
+			return false;
+		
+		return ProxyFactory.isProxyClass(clazz);
+	}
+	
 }

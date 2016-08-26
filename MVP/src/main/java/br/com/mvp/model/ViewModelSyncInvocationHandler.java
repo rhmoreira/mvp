@@ -7,8 +7,6 @@ import br.com.mvp.ComponentBind;
 import br.com.mvp.instrument.MethodHandlerChain;
 import br.com.mvp.instrument.ProxyInvocationHandler;
 import br.com.mvp.instrument.reflection.ClassHandler;
-import br.com.mvp.instrument.reflection.DependencyMapper;
-import br.com.mvp.instrument.reflection.MemberHandler;
 
 public class ViewModelSyncInvocationHandler implements ProxyInvocationHandler, BindingModel {
 

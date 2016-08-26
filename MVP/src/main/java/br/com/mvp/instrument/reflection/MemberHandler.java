@@ -68,16 +68,25 @@ public class MemberHandler {
 		return methodMap;
 	}
 	
-	public Method setterMethodForField(Field field){
+	public MethodHandler setterMethodForField(Field field){
 		String setterMethodName = Util.generateSetterMethodName(field.getName());
-		Method setterMethod = methodMap.get(setterMethodName);
-		return setterMethod;
+		return new MethodHandler(methodMap.get(setterMethodName));
 	}
 	
-	public Method getterMethodForField(Field field){
+	public MethodHandler getterMethodForField(Field field){
 		String getterMethodName = generateGetterMethodName(field);
-		Method getterMethod = methodMap.get(getterMethodName);
-		return getterMethod;
+		return new MethodHandler(methodMap.get(getterMethodName));
+	}
+	
+	public FieldHandler fieldForMethod(Method method){
+		String methodName = method.getName();
+		String allegedFieldName = Util.removeAndUncapitalize(methodName.substring(0, 3), methodName);
+		
+		Field field = getMappedFields().get(allegedFieldName);
+		if (field != null)
+			return new FieldHandler(field);
+		else
+			return null;
 	}
 	
 	private String generateGetterMethodName(Field field) {
@@ -94,5 +103,43 @@ public class MemberHandler {
 			return true;
 		else
 			return false;
+	}
+	
+	public class FieldHandler {
+		private Field field;
+		
+		public FieldHandler(Field field) {
+			this.field = field;
+		}
+		
+		public void setValue(Object target, Object value) throws Exception{
+			setAccessible();
+			field.set(target, value);
+		}
+		
+		public Object getValue(Object target) throws Exception{
+			setAccessible();
+			return field.get(target);
+		}
+		
+		private void setAccessible(){
+			if (!field.isAccessible())
+				field.setAccessible(true);
+		}
+	}
+	
+	public class MethodHandler{
+		
+		private Method method;
+
+		public MethodHandler(Method method) {
+			super();
+			this.method = method;
+		}
+		
+		public Object invoke(Object target, Object... args) throws Exception{
+			return method.invoke(target, args);
+		}
+		
 	}
 }

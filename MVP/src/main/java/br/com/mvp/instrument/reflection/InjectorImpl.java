@@ -41,7 +41,7 @@ class InjectorImpl implements Injector {
 						dependencyInstance = instrumentator.setupProxy().newInstance();
 						instanceCacheL1.put(entry.getValue(), dependencyInstance);
 					}
-					inject(target, dependencyInstance, memberHandler.setterMethodForField(entry.getKey()));
+					inject(target, dependencyInstance, entry.getKey());
 				}catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -96,4 +96,8 @@ public class ClassHandler {
 	public MemberHandler getMemberHandler() {
 		return memberHandler;
 	}
+	
+	public Class<?> getHandledClass(){
+		return clazz;
+	}
 }

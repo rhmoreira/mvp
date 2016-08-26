@@ -38,6 +38,8 @@ class DependencyMapperImpl implements DependencyMapper{
 	
 	@Override
 	public boolean isDependency(Class<?> modelClass) {
+		if (modelClass == null)
+			return false;
 		Class<?> proxiedClass = Util.getProxiedClass(modelClass);
 		return dependencyClasses.contains(proxiedClass);
 	}
