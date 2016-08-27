@@ -9,6 +9,5 @@ import java.lang.annotation.Target;
 @View
 @Target({FIELD})
 @Retention(RUNTIME)
-public @interface ViewComponent {
-
+public @interface Component {
 }

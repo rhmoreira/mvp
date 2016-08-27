@@ -17,7 +17,7 @@ public @interface Combo {
 
 	String fieldName() default "";
 	
-	Class<? extends ComboBoxModel<?>> listModel();
+	Class<? extends ComboBoxModel<?>> comboModel();
 	
 	ModelCollector collectionType() default ModelCollector.SELECTED;
 }

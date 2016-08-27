@@ -1,5 +1,7 @@
 package br.com.mvp.model;
 
+import br.com.mvp.binding.Bind;
+import br.com.mvp.binding.BindingInvocationHandler;
 import br.com.mvp.instrument.AbstractProxyInstrumentator;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.ProxyInvocationHandler;
@@ -17,7 +19,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 	public Instrumentator<M> setupProxy() {
 		if (!isSetup()){
 			return createProxy()
-					.setInterfaces(BindingModel.class)
+					.setInterfaces(Bind.class)
 					.useDefaultFilter();
 		}else
 			return this;
@@ -28,7 +30,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 		ClassHandler classHandler = getClassHandler();
 		
 		ProxyInvocationHandler viewModelSyncHandler = 
-				new BindingModelInvocationHandler(classHandler);
+				new BindingInvocationHandler(classHandler);
 		
 		ProxyInvocationHandler modelProxyatorHandler = 
 				new ModelProxyatorInvocationHandler(classHandler);

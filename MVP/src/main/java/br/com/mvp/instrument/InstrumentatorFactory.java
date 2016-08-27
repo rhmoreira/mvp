@@ -1,42 +1,27 @@
 package br.com.mvp.instrument;
 
-import br.com.mvp.model.BindingModel;
+import javax.swing.JPanel;
+
 import br.com.mvp.model.ModelProxyInstrumentator;
+import br.com.mvp.view.ViewProxyInstrumentator;
 
 public final class InstrumentatorFactory {
 
-	private enum Type{
-		MODEL,
-		VIEW;
-	}
-	
 	private InstrumentatorFactory() {}
 	
 	public static <T> Instrumentator<T> createModel(Class<T> clazz) throws Exception{
-		return create(Type.MODEL, clazz);
-	}
-	
-	public static <T> Instrumentator<T> createView(Class<T> clazz, BindingModel bindingModel) throws Exception{
-		return create(Type.VIEW, clazz, bindingModel);
-	}
-	
-	private static <T> Instrumentator<T> create(Type type, Class<T> proxiedClass) throws Exception{
-		return create(type, proxiedClass, null);
-	}
-	
-	private static <T> Instrumentator<T> create(Type type, Class<T> proxiedClass, BindingModel bindingModel) throws Exception{
-		Instrumentator<T> instrumentator = InstrumentatorCache.read(proxiedClass);
-		if (instrumentator == null){
-			switch (type) {
-			case MODEL:
-				instrumentator = new ModelProxyInstrumentator<T>(proxiedClass);
-				break;
-			default:
-				instrumentator = null;
-			}
-		}
+		Instrumentator<T> instrumentator = InstrumentatorCache.read(clazz);
+		if (instrumentator == null)
+			instrumentator = new ModelProxyInstrumentator<T>(clazz);
+		
 		return instrumentator;
 	}
 	
-	
+	public static <T extends JPanel> Instrumentator<T> createView(Class<T> clazz) throws Exception{
+		Instrumentator<T> instrumentator = InstrumentatorCache.read(clazz);
+		if (instrumentator == null)
+			instrumentator = new ViewProxyInstrumentator<T>(clazz);
+		
+		return instrumentator;
+	}
 }
