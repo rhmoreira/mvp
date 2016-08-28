@@ -28,7 +28,16 @@ class ControllerImpl<V extends JPanel, M> implements Controller<V, M> {
 		return model;
 	}
 
-	public List<Binding> getBindings() {
-		return bindings;
+	@Override
+	public void updateModel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateView() {
+		bindings.stream()
+			.forEach(b -> b.updateView());
+		
 	}
 }

@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-@SuppressWarnings("unchecked")
 public abstract class ComponentBinding<C extends Component> implements Binding {
 
 	protected Object modelInstance;
 	protected JPanel viewInstance;
 	protected FieldMatch fieldMatch;
+	protected C component;
 
 	public ComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super();
@@ -20,7 +20,8 @@ public abstract class ComponentBinding<C extends Component> implements Binding {
 		this.viewInstance = viewInstance;
 		this.fieldMatch = fieldMatch;
 		
-		finallyBind((C) ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField()));
+		component = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+		finallyBind(component);
 	}
 	
 	protected abstract void finallyBind(C component) throws Exception;
@@ -33,5 +34,9 @@ public abstract class ComponentBinding<C extends Component> implements Binding {
 	@Override
 	public Object getModel(){
 		return modelInstance;
+	}
+	
+	protected C getComponent(){
+		return component;
 	}
 }
