@@ -5,8 +5,8 @@ public interface Binding {
 	void updateView();
 	void updateModel();
 	
-	Bind getViewBind();
-	Bind getModelBind();
+	Object getView();
+	Object getModel();
 	
 	void undoBinding();
 }

@@ -9,7 +9,8 @@ public interface Bind {
 	ClassHandler getClassHandler();
 	Object getInstance();
 	
-	void setBindings(List<Binding> binding);
+	void setBindings(List<Binding> bindings);
+	void replace(Binding binding);
 	void undoBindings();
 	void sync();
 }

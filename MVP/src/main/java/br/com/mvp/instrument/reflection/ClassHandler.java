@@ -52,11 +52,13 @@ public class ClassHandler {
 		return Collections.unmodifiableMap(memberHandler.getMappedMethods());
 	}
 	
-	public void scan() throws Exception{
+	public ClassHandler scan() throws Exception{
 		if (filter.accept(clazz)){
 			mapClass(clazz);
 			dependencyMapper.mapModelDependencies();
 		}
+		
+		return this;
 	}
 	
 	private void mapClass(Class<?> clazz) throws Exception {

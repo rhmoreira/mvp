@@ -1,11 +1,14 @@
 package br.com.mvp;
 
+import java.util.List;
+
 import javax.swing.JPanel;
 
 import br.com.mvp.binding.Bind;
-import br.com.mvp.binding.ViewModelBinder;
+import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
+import br.com.mvp.view.ViewModelBinder;
 import br.com.mvp.view.annotation.View;
 
 @SuppressWarnings("unchecked")
@@ -22,8 +25,10 @@ public class MVP<V extends JPanel, M> {
 		M modelInstance = createInstance(InstrumentatorFactory.create(model));
 		
 		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, jpanel);
+		List<Binding> bindingList = vmb.bind();
+		((Bind) modelInstance).setBindings(bindingList);
 		
-		return new ControllerImpl<V, M>(jpanel, modelInstance, vmb.bind());
+		return new ControllerImpl<V, M>(jpanel, modelInstance, bindingList);
 			
 	}
 	

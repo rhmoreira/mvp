@@ -15,8 +15,9 @@ public class MemberHandler {
 
 	private Map<String, Field> fieldMap = new HashMap<>();
 	private Map<String, Method> methodMap = new HashMap<>();
+	private boolean mapMethods = true;
 	
-	private ClassMemberFilter filter;
+	protected ClassMemberFilter filter;
 	
 	public MemberHandler(ClassMemberFilter filter) {
 		super();
@@ -35,14 +36,16 @@ public class MemberHandler {
 	}
 	
 	protected void mapGettersAndSetters(Field[] acceptedFields) throws Exception{
-		for (Field field: fieldMap.values()){
-			Class<?> declaringClass = field.getDeclaringClass();
-			
-			String setterMethod = Util.generateSetterMethodName(field.getName());
-			mapMethod(declaringClass, setterMethod, new Class[]{field.getType()}, field.getName());
-			
-			String getterMethod = generateGetterMethodName(field);
-			mapMethod(declaringClass, getterMethod, new Class[]{}, field.getName());
+		if (mapMethods){
+			for (Field field: fieldMap.values()){
+				Class<?> declaringClass = field.getDeclaringClass();
+				
+				String setterMethod = Util.generateSetterMethodName(field.getName());
+				mapMethod(declaringClass, setterMethod, new Class[]{field.getType()}, field.getName());
+				
+				String getterMethod = generateGetterMethodName(field);
+				mapMethod(declaringClass, getterMethod, new Class[]{}, field.getName());
+			}
 		}
 	}
 
@@ -68,27 +71,6 @@ public class MemberHandler {
 		return methodMap;
 	}
 	
-	public MethodHandler setterMethodForField(Field field){
-		String setterMethodName = Util.generateSetterMethodName(field.getName());
-		return new MethodHandler(methodMap.get(setterMethodName));
-	}
-	
-	public MethodHandler getterMethodForField(Field field){
-		String getterMethodName = generateGetterMethodName(field);
-		return new MethodHandler(methodMap.get(getterMethodName));
-	}
-	
-	public FieldHandler fieldForMethod(Method method){
-		String methodName = method.getName();
-		String allegedFieldName = Util.removeAndUncapitalize(methodName.substring(0, 3), methodName);
-		
-		Field field = getMappedFields().get(allegedFieldName);
-		if (field != null)
-			return new FieldHandler(field);
-		else
-			return null;
-	}
-	
 	private String generateGetterMethodName(Field field) {
 		String getterMethod = 
 				field.getType().isPrimitive() && field.getType() == boolean.class ?
@@ -104,28 +86,19 @@ public class MemberHandler {
 		else
 			return false;
 	}
+
+	public void setMapMethods(boolean mapMethods) {
+		this.mapMethods = mapMethods;
+	}
 	
-	public class FieldHandler {
-		private Field field;
-		
-		public FieldHandler(Field field) {
-			this.field = field;
-		}
-		
-		public void setValue(Object target, Object value) throws Exception{
-			setAccessible();
-			field.set(target, value);
-		}
-		
-		public Object getValue(Object target) throws Exception{
-			setAccessible();
-			return field.get(target);
-		}
-		
-		private void setAccessible(){
-			if (!field.isAccessible())
-				field.setAccessible(true);
-		}
+	public MethodHandler setterMethodForField(Field field){
+		String setterMethodName = Util.generateSetterMethodName(field.getName());
+		return new MethodHandler(methodMap.get(setterMethodName));
+	}
+	
+	public MethodHandler getterMethodForField(Field field){
+		String getterMethodName = generateGetterMethodName(field);
+		return new MethodHandler(methodMap.get(getterMethodName));
 	}
 	
 	public class MethodHandler{

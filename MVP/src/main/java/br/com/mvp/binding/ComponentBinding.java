@@ -2,31 +2,30 @@ package br.com.mvp.binding;
 
 import java.awt.Component;
 
-public class ComponentBinding<C extends Component> implements Binding {
-	
-	
+import javax.swing.JPanel;
 
-	@Override
-	public void updateView() {
+import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+
+public abstract class ComponentBinding<C extends Component> implements Binding {
+
+	protected Object modelInstance;
+	protected JPanel viewInstance;
+	protected FieldMatch fieldMatch;
+
+	public ComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+		super();
+		this.modelInstance = modelInstance;
+		this.viewInstance = viewInstance;
+		this.fieldMatch = fieldMatch;
 	}
 
 	@Override
-	public void updateModel() {
+	public Object getView() {
+		return viewInstance;
 	}
 
 	@Override
-	public Bind getViewBind() {
-		return null;
+	public Object getModel(){
+		return modelInstance;
 	}
-
-	@Override
-	public Bind getModelBind() {
-		return null;
-	}
-
-	@Override
-	public void undoBinding() {
-
-	}
-
 }

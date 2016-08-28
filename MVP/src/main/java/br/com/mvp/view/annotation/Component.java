@@ -6,7 +6,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@View
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface Component {

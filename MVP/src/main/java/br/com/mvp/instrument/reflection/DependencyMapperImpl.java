@@ -2,6 +2,7 @@ package br.com.mvp.instrument.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ import br.com.mvp.instrument.InstrumentatorFactory;
 class DependencyMapperImpl implements DependencyMapper{
 
 	private ClassHandler classHandler;
-	private Map<Field, Class<?>> dependencyMap;
+	private Map<Field, Class<?>> dependencyMap = new HashMap<>();
 	private Collection<Class<?>> dependencyClasses;
 
 	public DependencyMapperImpl(ClassHandler classHandler) {
@@ -22,7 +23,7 @@ class DependencyMapperImpl implements DependencyMapper{
 	}
 	
 	public void mapModelDependencies() {
-		Map<Field, Class<?>> dependencyMap = filterModelClasses();
+		Map<Field, Class<?>> dependencyMap = filterDependencyClasses();
 		
 		dependencyMap.forEach( (f, c) -> {
 			try {
@@ -49,7 +50,7 @@ class DependencyMapperImpl implements DependencyMapper{
 		return dependencyMap;
 	}
 	
-	private Map<Field, Class<?>> filterModelClasses(){
+	private Map<Field, Class<?>> filterDependencyClasses(){
 		ClassMemberFilter filter = classHandler.getFilter();
 		Collection<Field> scannedFields = classHandler.getScannedFields();
 		

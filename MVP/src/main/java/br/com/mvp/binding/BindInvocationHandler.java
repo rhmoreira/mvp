@@ -1,48 +1,40 @@
 package br.com.mvp.binding;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import br.com.mvp.instrument.MethodHandlerChain;
 import br.com.mvp.instrument.ProxyInvocationHandler;
 import br.com.mvp.instrument.reflection.ClassHandler;
+import br.com.mvp.instrument.reflection.ReflectionUtils;
 
-@SuppressWarnings("unchecked")
-public class BindingInvocationHandler implements ProxyInvocationHandler, Bind {
+public class BindInvocationHandler implements ProxyInvocationHandler, Bind {
 
 	private ClassHandler classHandler;
 	private Object instance;
+	private Map<String, Method> bindMethods;
 	
-	private static Set<String> bindMethodsSet = new HashSet<>(
-			Arrays.asList("getClassHandler", "getInstance", "setBindings", "undoBindings", "sync"));
+	private List<Binding> bindings;
 	
-	public BindingInvocationHandler(ClassHandler classHandler) {
+	public BindInvocationHandler(ClassHandler classHandler) throws Exception{
 		this.classHandler = classHandler;
+		BindClassFilter filter = new BindClassFilter();
+		this.bindMethods = new ClassHandler(
+									this.getClass(), 
+									Object.class,
+									filter,
+									new BindMemberHandler(filter)
+								).scan()
+								 .getMappedMethods();
 	}
 
 	@Override
 	public Object invoke(Object instance, Method method, Method proceed, Object[] args, MethodHandlerChain chain) throws Throwable {
 		this.instance = instance;
-		
-		switch (method.getName()) {
-		case "getClassHandler":
-			return getClassHandler();
-		case "getInstance":
-			return getInstance();
-		case "setBindings":
-			setBindings((List<Binding>) args[0]);
-			return null;
-		case "undoBindings":
-			undoBindings();
-			return null;
-		case "sync":
-			sync();
-			return null;
-		default:
+		if (bindMethods.get(method.getName()) != null)
+			return ReflectionUtils.invokeMethod(this, bindMethods.get(method.getName()), args);
+		else
 			return chain.invokeNext(instance, method, proceed, args);
-		}
 	}
 
 	@Override
@@ -56,7 +48,12 @@ public class BindingInvocationHandler implements ProxyInvocationHandler, Bind {
 	}
 	
 	@Override
-	public void setBindings(List<Binding> binding) {
+	public void setBindings(List<Binding> bindings){
+		this.bindings = bindings;
+	}
+	
+	@Override
+	public void replace(Binding binding){
 		
 	}
 	

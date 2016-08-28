@@ -1,7 +1,7 @@
 package br.com.mvp.model;
 
 import br.com.mvp.binding.Bind;
-import br.com.mvp.binding.BindingInvocationHandler;
+import br.com.mvp.binding.BindInvocationHandler;
 import br.com.mvp.instrument.AbstractProxyInstrumentator;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.ProxyInvocationHandler;
@@ -30,7 +30,7 @@ public class ModelProxyInstrumentator<M> extends AbstractProxyInstrumentator<M>{
 		ClassHandler classHandler = getClassHandler();
 		
 		ProxyInvocationHandler viewModelSyncHandler = 
-				new BindingInvocationHandler(classHandler);
+				new BindInvocationHandler(classHandler);
 		
 		ProxyInvocationHandler modelProxyatorHandler = 
 				new ModelProxyatorInvocationHandler(classHandler);

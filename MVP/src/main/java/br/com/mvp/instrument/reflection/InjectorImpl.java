@@ -13,7 +13,7 @@ class InjectorImpl implements Injector {
 
 	@Override
 	public void inject(Object target, Object value, Method setter) throws Exception {
-		ReflectionUtils.invokeMethod(target, value, setter);
+		ReflectionUtils.invokeMethod(target, setter, value);
 	}
 	
 	@Override
