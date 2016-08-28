@@ -73,5 +73,10 @@ public class ViewModelFieldMatcher {
 		public void setModelAnnotation(Annotation modelAnnotation) {
 			this.modelAnnotation = modelAnnotation;
 		}
+		
+		@Override
+		public String toString() {
+			return viewField.toString() + " | " + modelField.toString() + " | " + modelAnnotation.toString();
+		}
 	}
 }

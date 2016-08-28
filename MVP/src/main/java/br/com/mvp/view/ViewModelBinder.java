@@ -27,12 +27,10 @@ public class ViewModelBinder {
 		this.modelBind = modelBind;
 		this.modelClassHandler = modelBind.getClassHandler();
 		this.view = view;
-		this.viewClassHandler = new ViewClassHandler<>(view.getClass());
+		this.viewClassHandler = new ViewClassHandler<>(view.getClass()).scan();
 	}
 
 	public List<Binding> bind() throws Exception{
-		viewClassHandler.scan();
-		
 		List<Binding> bindings = new ArrayList<>();
 		
 		bindings.addAll(bindView());
@@ -65,14 +63,14 @@ public class ViewModelBinder {
 		for (Field f: dependencyFields){
 			Bind model = ReflectionUtils.getFieldValue(modelBind, f);
 			ViewModelBinder vmb = new ViewModelBinder(model, view);
-			bindings.addAll(vmb.bind());
+			bindings.addAll(vmb.bindModel());
 		}
-		
-		System.out.println(modelBind);
-		System.out.println(view);
 		
 		ViewModelFieldMatcher matcher = new ViewModelFieldMatcher();
 		List<FieldMatch> matchList = matcher.match(viewClassHandler.getScannedFields(), modelClassHandler.getScannedFields());
+		
+		System.out.print(modelBind.getClass());
+		System.out.println(view.getClass());
 		
 		for (FieldMatch match: matchList)
 			bindings.add(
