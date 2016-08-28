@@ -23,7 +23,7 @@ public abstract class ComponentBinding<C extends Component> implements Binding {
 		finallyBind((C) ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField()));
 	}
 	
-	protected abstract void finallyBind(C component);
+	protected abstract void finallyBind(C component) throws Exception;
 
 	@Override
 	public Object getView() {
