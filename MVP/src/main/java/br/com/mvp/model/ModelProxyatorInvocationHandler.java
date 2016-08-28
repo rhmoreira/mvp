@@ -39,7 +39,7 @@ public class ModelProxyatorInvocationHandler implements ProxyInvocationHandler {
 	}
 	
 	private Object createModelReplacement(Object model) throws Exception {
-		Instrumentator<Object> instrumentator = InstrumentatorFactory.createModel(Util.getProxiedClass(model));
+		Instrumentator<Object> instrumentator = InstrumentatorFactory.create(Util.getProxiedClass(model));
 		return instrumentator.newInstance();
 	}
 

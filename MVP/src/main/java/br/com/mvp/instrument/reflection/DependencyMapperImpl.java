@@ -26,7 +26,7 @@ class DependencyMapperImpl implements DependencyMapper{
 		
 		dependencyMap.forEach( (f, c) -> {
 			try {
-				Instrumentator<?> instrumentator = InstrumentatorFactory.createModel(c);
+				Instrumentator<?> instrumentator = InstrumentatorFactory.create(c);
 				instrumentator.setupProxy();
 			}
 			catch (Exception e) {}

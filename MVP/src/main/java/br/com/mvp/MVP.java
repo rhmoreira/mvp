@@ -11,19 +11,19 @@ import br.com.mvp.view.annotation.View;
 @SuppressWarnings("unchecked")
 public class MVP<V extends JPanel, M> {
 	
-	public Controller<V, M> createController(Class<V> viewClass) throws Exception{
+	public Controller<V, M> createController(V jpanel) throws Exception{
+		Class<? extends JPanel> viewClass = jpanel.getClass();
 		View view = viewClass.getAnnotation(View.class);
 		
 		Class<M> model = (Class<M>) view.model();
 		if (model == Class.class)
 			throw new Exception("No models found for view " + viewClass.getName());
 		
-		M modelInstance = createInstance(InstrumentatorFactory.createModel(model));
-		V viewInstance = 	createInstance(InstrumentatorFactory.createView(viewClass));
+		M modelInstance = createInstance(InstrumentatorFactory.create(model));
 		
-		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, (Bind) viewInstance);
+		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, jpanel);
 		
-		return new ControllerImpl<V, M>(viewInstance, modelInstance, vmb.bind());
+		return new ControllerImpl<V, M>(jpanel, modelInstance, vmb.bind());
 			
 	}
 	

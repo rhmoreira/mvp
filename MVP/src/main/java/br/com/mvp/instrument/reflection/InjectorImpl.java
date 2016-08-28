@@ -13,15 +13,12 @@ class InjectorImpl implements Injector {
 
 	@Override
 	public void inject(Object target, Object value, Method setter) throws Exception {
-		setter.invoke(target, value);
+		ReflectionUtils.invokeMethod(target, value, setter);
 	}
 	
 	@Override
 	public void inject(Object target, Object value, Field field) throws Exception {
-		if (!field.isAccessible())
-			field.setAccessible(true);
-		
-		field.set(target, value);
+		ReflectionUtils.setFieldValue(target, value, field);
 	}
 
 	@Override
@@ -37,7 +34,7 @@ class InjectorImpl implements Injector {
 				try{
 					Object dependencyInstance = instanceCacheL1.get(entry.getValue());
 					if (dependencyInstance == null){
-						Instrumentator<?> instrumentator = InstrumentatorFactory.createModel(entry.getValue());
+						Instrumentator<?> instrumentator = InstrumentatorFactory.create(entry.getValue());
 						dependencyInstance = instrumentator.setupProxy().newInstance();
 						instanceCacheL1.put(entry.getValue(), dependencyInstance);
 					}
