@@ -1,13 +1,10 @@
 package br.com.mvp.binding;
 
-import java.lang.reflect.Field;
-
 import javax.swing.JPanel;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import br.com.mvp.binding.listener.BindingDocumentListener;
-import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
 public class TextComponentBinding extends ComponentBinding<JTextComponent> {
@@ -16,16 +13,10 @@ public class TextComponentBinding extends ComponentBinding<JTextComponent> {
 
 	public TextComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		
-		addListener();
 	}
 
-	private void addListener() throws Exception {
-		Field viewField = fieldMatch.getViewField();
-		JTextComponent textComp = ReflectionUtils.getFieldValue(viewInstance, viewField);
-		
+	protected void finallyBind(JTextComponent textComp){
 		this.documentListener = new BindingDocumentListener(modelInstance, viewInstance, fieldMatch);
-		
 		textComp.getDocument().addDocumentListener(this.documentListener);
 	}
 

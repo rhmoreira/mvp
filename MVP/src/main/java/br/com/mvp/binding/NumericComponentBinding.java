@@ -8,8 +8,13 @@ import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
 public class NumericComponentBinding extends ComponentBinding<Component> {
 
-	public NumericComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public NumericComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
+	}
+	
+	@Override
+	protected void finallyBind(Component component) {
+		
 	}
 
 	@Override
@@ -29,5 +34,4 @@ public class NumericComponentBinding extends ComponentBinding<Component> {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

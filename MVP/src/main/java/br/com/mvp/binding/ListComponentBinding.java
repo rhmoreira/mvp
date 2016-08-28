@@ -8,10 +8,16 @@ import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
 public class ListComponentBinding extends ComponentBinding<JList<? extends DefaultListModel<?>>> {
 
-	public ListComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public ListComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 
+	@Override
+	protected void finallyBind(JList<? extends DefaultListModel<?>> component) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	public void updateView() {
 		// TODO Auto-generated method stub
@@ -29,5 +35,7 @@ public class ListComponentBinding extends ComponentBinding<JList<? extends Defau
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

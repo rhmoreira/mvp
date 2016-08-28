@@ -8,10 +8,16 @@ import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
 public class ComboComponentBinding extends ComponentBinding<JComboBox<? extends DefaultComboBoxModel<?>>> {
 
-	public ComboComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public ComboComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 
+	@Override
+	protected void finallyBind(JComboBox<? extends DefaultComboBoxModel<?>> component) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	public void updateView() {
 		// TODO Auto-generated method stub
@@ -29,5 +35,4 @@ public class ComboComponentBinding extends ComponentBinding<JComboBox<? extends 
 		// TODO Auto-generated method stub
 		
 	}
-
 }
