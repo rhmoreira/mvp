@@ -17,7 +17,7 @@ public @interface List {
 
 	String fieldName() default "";
 	
-	Class<? extends DefaultListModel<? extends Object>> listModel();
+	Class<? extends DefaultListModel<? extends Object>> model();
 	
 	ModelCollector collectionType() default ModelCollector.SELECTED;
 }

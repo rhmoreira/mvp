@@ -13,9 +13,9 @@ import javax.swing.event.ListSelectionListener;
 
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public class BindingListListener extends BindingListener implements ListSelectionListener, ListDataListener {
+public class ListListener extends Listener implements ListSelectionListener, ListDataListener {
 
-	public BindingListListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public ListListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 

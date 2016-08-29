@@ -1,4 +1,4 @@
-package br.com.mvp.binding;
+package br.com.mvp.binding.impl;
 
 import java.awt.Component;
 
@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public class NumericComponentBinding extends ComponentBinding<Component> {
+public class NumericBinding extends ComponentBinding<Component> {
 
-	public NumericComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
+	public NumericBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 	

@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.beanutils.MethodUtils;
 
 import br.com.mvp.instrument.reflection.ReflectionUtils;
-import br.com.mvp.view.annotation.Radio;
 import br.com.mvp.view.annotation.View;
 
 public class ViewModelFieldMatcher {
@@ -19,7 +18,7 @@ public class ViewModelFieldMatcher {
 		for (Field viewField: viewFields)
 			for (Field modelField: modelFields)
 				if (isMatch(viewField, modelField))
-					matches.add(new FieldMatch(viewField, modelField));
+					matches.add(new ViewModelFieldMatcher.FieldMatch(viewField, modelField));
 				
 		return matches;
 	}
@@ -30,11 +29,9 @@ public class ViewModelFieldMatcher {
 		
 		Annotation a = ReflectionUtils.getStereotypedAnnotation(View.class, mField);
 		if (a != null){
-			if (!(a instanceof Radio)){
-				String fieldName = (String) MethodUtils.invokeMethod(a, "fieldName", new Object[]{});
-				if (!fieldName.equals(""))
-					mappedName = fieldName;
-			}
+			String fieldName = (String) MethodUtils.invokeMethod(a, "fieldName", new Object[]{});
+			if (!fieldName.equals(""))
+				mappedName = fieldName;
 			if (viewFieldName.equals(mappedName))
 				return true;
 		}

@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface Radio {
 
-	String buttonGroupFieldName();
+	String fieldName() default "";
 }

@@ -1,24 +1,24 @@
-package br.com.mvp.binding;
+package br.com.mvp.binding.impl;
 
 import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import br.com.mvp.binding.listener.BindingCheckboxItemListener;
+import br.com.mvp.binding.listener.CheckboxItemListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public class CheckboxComponentBinding extends ComponentBinding<JCheckBox> {
+public class CheckboxBinding extends ComponentBinding<JCheckBox> {
 
 	private ItemListener itemListener;
 	
-	public CheckboxComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
+	public CheckboxBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
+		this.itemListener = new CheckboxItemListener(modelInstance, viewInstance, fieldMatch);
 	}
 
 	@Override
 	protected void finallyBind(JCheckBox component) {
-		this.itemListener = new BindingCheckboxItemListener(modelInstance, viewInstance, fieldMatch);
 		component.addItemListener(this.itemListener);
 	}
 	

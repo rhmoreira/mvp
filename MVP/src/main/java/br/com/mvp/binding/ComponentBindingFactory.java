@@ -8,6 +8,13 @@ import javax.swing.JPanel;
 
 import org.apache.commons.beanutils.ConstructorUtils;
 
+import br.com.mvp.binding.impl.CheckboxBinding;
+import br.com.mvp.binding.impl.ComboBinding;
+import br.com.mvp.binding.impl.ComponentBinding;
+import br.com.mvp.binding.impl.ListBinding;
+import br.com.mvp.binding.impl.NumericBinding;
+import br.com.mvp.binding.impl.RadioBinding;
+import br.com.mvp.binding.impl.TextBinding;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.Checkbox;
 import br.com.mvp.view.annotation.Combo;
@@ -21,12 +28,12 @@ public final class ComponentBindingFactory {
 	public static Map<Class<? extends Annotation>, Class<? extends Binding>> annotationBindingMap = new HashMap<>();
 	
 	static{
-		annotationBindingMap.put(Checkbox.class, CheckboxComponentBinding.class);
-		annotationBindingMap.put(Combo.class, ComboComponentBinding.class);
-		annotationBindingMap.put(List.class, ListComponentBinding.class);
-		annotationBindingMap.put(Numeric.class, NumericComponentBinding.class);
-		annotationBindingMap.put(Radio.class, RadioComponentBinding.class);
-		annotationBindingMap.put(Text.class, TextComponentBinding.class);
+		annotationBindingMap.put(Checkbox.class, CheckboxBinding.class);
+		annotationBindingMap.put(Combo.class, ComboBinding.class);
+		annotationBindingMap.put(List.class, ListBinding.class);
+		annotationBindingMap.put(Numeric.class, NumericBinding.class);
+		annotationBindingMap.put(Radio.class, RadioBinding.class);
+		annotationBindingMap.put(Text.class, TextBinding.class);
 	}
 	
 	private ComponentBindingFactory() {}
@@ -35,9 +42,9 @@ public final class ComponentBindingFactory {
 		Class<? extends Binding> bindingClass = 
 				annotationBindingMap.get(match.getModelAnnotation().annotationType());
 		
-		Binding binding = (Binding) ConstructorUtils
+		ComponentBinding<?> binding = (ComponentBinding<?>) ConstructorUtils
 				.invokeConstructor(bindingClass, new Object[]{model, view, match});
-		
+		binding.finallyBind();
 		return binding;
 	}
 }

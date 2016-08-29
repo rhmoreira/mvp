@@ -1,4 +1,4 @@
-package br.com.mvp.binding;
+package br.com.mvp.binding.impl;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -10,31 +10,31 @@ import javax.swing.ListModel;
 
 import org.apache.commons.beanutils.ConstructorUtils;
 
-import br.com.mvp.binding.listener.BindingListListener;
+import br.com.mvp.binding.listener.ListListener;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ModelCollector;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.List;
 
-public class ListComponentBinding extends ComponentBinding<JList<Object>> {
+public class ListBinding extends ComponentBinding<JList<Object>> {
 
-	private BindingListListener listener;
+	private ListListener listener;
 	
-	public ListComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
+	public ListBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
+		this.listener = new ListListener(modelInstance, viewInstance, fieldMatch);
 	}
 
 	@Override
 	protected void finallyBind(JList<Object> component) throws Exception {
-		this.listener = new BindingListListener(modelInstance, viewInstance, fieldMatch);
 		
-		List modelAnnotation = (List) fieldMatch.getModelAnnotation();
+		List componentAnnotation = (List) fieldMatch.getModelAnnotation();
 		
 		DefaultListModel<? extends Object> listModel = ConstructorUtils
-				.invokeConstructor(modelAnnotation.listModel(), new Object[]{});
+				.invokeConstructor(componentAnnotation.model(), new Object[]{});
 		component.setModel((ListModel<Object>) listModel);
 
-		if (modelAnnotation.collectionType() == ModelCollector.SELECTED)
+		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
 			component.addListSelectionListener(listener);
 		else
 			listModel.addListDataListener(listener);

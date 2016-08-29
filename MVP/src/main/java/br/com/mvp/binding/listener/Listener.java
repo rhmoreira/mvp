@@ -7,7 +7,7 @@ import br.com.mvp.instrument.reflection.ClassHandler;
 import br.com.mvp.instrument.reflection.MemberHandler.MethodHandler;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-abstract class BindingListener {
+public abstract class Listener {
 
 	protected Object modelInstance;
 	protected JPanel viewInstance;
@@ -15,7 +15,7 @@ abstract class BindingListener {
 	
 	protected ClassHandler modelClassHandler;
 	
-	public BindingListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public Listener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
 		super();
 		this.modelInstance = modelInstance;
 		this.viewInstance = viewInstance;

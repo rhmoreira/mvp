@@ -1,22 +1,22 @@
-package br.com.mvp.binding;
+package br.com.mvp.binding.impl;
 
 import javax.swing.JPanel;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
-import br.com.mvp.binding.listener.BindingDocumentListener;
+import br.com.mvp.binding.listener.TextDocumentListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public class TextComponentBinding extends ComponentBinding<JTextComponent> {
+public class TextBinding extends ComponentBinding<JTextComponent> {
 	
 	private DocumentListener documentListener;
 
-	public TextComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
+	public TextBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
+		this.documentListener = new TextDocumentListener(modelInstance, viewInstance, fieldMatch);
 	}
 
 	protected void finallyBind(JTextComponent textComp){
-		this.documentListener = new BindingDocumentListener(modelInstance, viewInstance, fieldMatch);
 		textComp.getDocument().addDocumentListener(this.documentListener);
 	}
 

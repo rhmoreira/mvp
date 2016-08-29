@@ -8,9 +8,9 @@ import javax.swing.JPanel;
 
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public class BindingCheckboxItemListener extends BindingListener implements ItemListener {
+public class CheckboxItemListener extends Listener implements ItemListener {
 
-	public BindingCheckboxItemListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public CheckboxItemListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 

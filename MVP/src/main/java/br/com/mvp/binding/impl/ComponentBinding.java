@@ -1,13 +1,12 @@
-package br.com.mvp.binding;
-
-import java.awt.Component;
+package br.com.mvp.binding.impl;
 
 import javax.swing.JPanel;
 
+import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
-public abstract class ComponentBinding<C extends Component> implements Binding {
+public abstract class ComponentBinding<C> implements Binding {
 
 	protected Object modelInstance;
 	protected JPanel viewInstance;
@@ -21,6 +20,9 @@ public abstract class ComponentBinding<C extends Component> implements Binding {
 		this.fieldMatch = fieldMatch;
 		
 		component = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+	}
+	
+	public final void finallyBind() throws Exception{
 		finallyBind(component);
 	}
 	

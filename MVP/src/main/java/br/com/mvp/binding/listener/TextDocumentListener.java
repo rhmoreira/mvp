@@ -12,9 +12,9 @@ import org.apache.commons.beanutils.ConstructorUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.Numeric;
 
-public class BindingDocumentListener extends BindingListener implements DocumentListener {
+public class TextDocumentListener extends Listener implements DocumentListener {
 	
-	public BindingDocumentListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
+	public TextDocumentListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
 		super(modelInstance, viewInstance, fieldMatch);
 	}
 
