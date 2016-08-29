@@ -18,9 +18,13 @@ public class MVP<V extends JPanel, M> {
 		Class<? extends JPanel> viewClass = jpanel.getClass();
 		View view = viewClass.getAnnotation(View.class);
 		
+		if (view == null)
+			throw new Exception("View not mapped. Use @br.com.mvp.view.annotation.View to map to a valid model-view class");
+		
 		Class<M> model = (Class<M>) view.model();
 		if (model == Class.class)
-			throw new Exception("No models found for view " + viewClass.getName());
+			throw new Exception("No models found for view " + viewClass.getName() + 
+					". Specify the model class using the 'model' attribute");
 		
 		M modelInstance = createInstance(InstrumentatorFactory.create(model));
 		
