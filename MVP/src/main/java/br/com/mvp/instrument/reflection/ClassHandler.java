@@ -17,7 +17,7 @@ public class ClassHandler {
 	private ClassMemberFilter filter;
 	
 	public ClassHandler(Class<?> clazz, Class<?> topLevelClass) throws Exception{
-		this(clazz, topLevelClass, null);
+		this(clazz, topLevelClass, new SimpleFilter());
 	}
 	
 	public ClassHandler(Class<?> clazz, Class<?> topLevelClass, ClassMemberFilter filter) throws Exception{
@@ -74,19 +74,6 @@ public class ClassHandler {
 		return filter;
 	}
 	
-	private class SimpleFilter implements ClassMemberFilter{
-
-		public boolean accept(Class<?> clazz){
-			return true;
-		}
-		public boolean accept(Field ctField){
-			return true;
-		}
-		public boolean accept(Method ctMethod){
-			return true;
-		}
-	}
-
 	public Injector getInjector() {
 		return injector;
 	}

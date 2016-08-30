@@ -27,11 +27,13 @@ public class MVP<V extends JPanel, M> {
 					". Specify the model class using the 'model' attribute");
 		
 		M modelInstance = createInstance(InstrumentatorFactory.create(model));
-		
+		return createController(jpanel, modelInstance);
+			
+	}
+	
+	public Controller<V, M> createController(V jpanel, M modelInstance) throws Exception{
 		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, jpanel);
 		List<Binding> bindingList = vmb.bind();
-		((Bind) modelInstance).setBindings(bindingList);
-		
 		return new ControllerImpl<V, M>(jpanel, modelInstance, bindingList);
 			
 	}

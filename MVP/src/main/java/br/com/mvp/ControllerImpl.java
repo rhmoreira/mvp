@@ -29,15 +29,15 @@ class ControllerImpl<V extends JPanel, M> implements Controller<V, M> {
 	}
 
 	@Override
-	public void updateModel() {
+	public void updateModel() throws Exception{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updateView() {
-		bindings.stream()
-			.forEach(b -> b.updateView());
+	public void updateView() throws Exception {
+		for (Binding b: bindings)
+			b.updateView();
 		
 	}
 }

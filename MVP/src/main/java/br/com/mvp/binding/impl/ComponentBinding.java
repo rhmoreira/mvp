@@ -29,7 +29,7 @@ public abstract class ComponentBinding<C> implements Binding {
 	protected abstract void finallyBind(C component) throws Exception;
 
 	@Override
-	public Object getView() {
+	public Object getView(){
 		return viewInstance;
 	}
 
@@ -40,5 +40,13 @@ public abstract class ComponentBinding<C> implements Binding {
 	
 	protected C getComponent(){
 		return component;
+	}
+	
+	protected Object getModelValue() throws Exception{
+		return ReflectionUtils.getFieldValue(modelInstance, fieldMatch.getModelField());
+	}
+	
+	protected void setModelValue(Object value) throws Exception{
+		ReflectionUtils.setFieldValue(modelInstance, value, fieldMatch.getModelField());
 	}
 }

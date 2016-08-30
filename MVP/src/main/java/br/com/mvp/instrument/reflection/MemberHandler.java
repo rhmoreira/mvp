@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import br.com.mvp.Util;
+import br.com.mvp.util.MVPUtil;
 
 public class MemberHandler {
 
@@ -40,7 +40,7 @@ public class MemberHandler {
 			for (Field field: fieldMap.values()){
 				Class<?> declaringClass = field.getDeclaringClass();
 				
-				String setterMethod = Util.generateSetterMethodName(field.getName());
+				String setterMethod = MVPUtil.generateSetterMethodName(field.getName());
 				mapMethod(declaringClass, setterMethod, new Class[]{field.getType()}, field.getName());
 				
 				String getterMethod = generateGetterMethodName(field);
@@ -74,8 +74,8 @@ public class MemberHandler {
 	private String generateGetterMethodName(Field field) {
 		String getterMethod = 
 				field.getType().isPrimitive() && field.getType() == boolean.class ?
-					Util.generatePrimitiveBooleanGetterMethodName(field.getName()):
-					Util.generateGetterMethodName(field.getName());
+					MVPUtil.generatePrimitiveBooleanGetterMethodName(field.getName()):
+					MVPUtil.generateGetterMethodName(field.getName());
 		return getterMethod;
 	}
 
@@ -92,7 +92,7 @@ public class MemberHandler {
 	}
 	
 	public MethodHandler setterMethodForField(Field field){
-		String setterMethodName = Util.generateSetterMethodName(field.getName());
+		String setterMethodName = MVPUtil.generateSetterMethodName(field.getName());
 		return new MethodHandler(methodMap.get(setterMethodName));
 	}
 	

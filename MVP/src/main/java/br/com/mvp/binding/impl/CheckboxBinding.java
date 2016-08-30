@@ -23,15 +23,16 @@ public class CheckboxBinding extends ComponentBinding<JCheckBox> {
 	}
 	
 	@Override
-	public void updateView() {
-		// TODO Auto-generated method stub
-		
+	public void updateView() throws Exception {
+		JCheckBox checkBox = getComponent();
+		Object value = getModelValue();
+		checkBox.setSelected(value != null ? (Boolean) value : false);
 	}
 
 	@Override
-	public void updateModel() {
-		// TODO Auto-generated method stub
-		
+	public void updateModel() throws Exception{
+		JCheckBox checkBox = getComponent();
+		setModelValue(checkBox.isSelected());
 	}
 
 	@Override

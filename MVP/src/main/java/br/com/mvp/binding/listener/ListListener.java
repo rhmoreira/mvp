@@ -1,9 +1,7 @@
 package br.com.mvp.binding.listener;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.ListDataEvent;
@@ -11,6 +9,8 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 
 public class ListListener extends Listener implements ListSelectionListener, ListDataListener {
@@ -45,14 +45,9 @@ public class ListListener extends Listener implements ListSelectionListener, Lis
 	@Override
 	public void contentsChanged(ListDataEvent event) {
 		try{
-			DefaultListModel<?> listModel = (DefaultListModel<?>) event.getSource();
-			
-			java.util.List<Object> values = new ArrayList<>();
-			for (int i = 0; i < listModel.size(); i++)
-				values.add(listModel.get(i));
-			
-			updateModel(values);
-		
+			JList<Object> jList = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+			JListUtil<Object> jListUtil = new JListUtil<>(jList);
+			updateModel(jListUtil.getValues());
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

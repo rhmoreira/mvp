@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import br.com.mvp.Util;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
+import br.com.mvp.util.MVPUtil;
 
 class DependencyMapperImpl implements DependencyMapper{
 
@@ -41,7 +41,7 @@ class DependencyMapperImpl implements DependencyMapper{
 	public boolean isDependency(Class<?> modelClass) {
 		if (modelClass == null)
 			return false;
-		Class<?> proxiedClass = Util.getProxiedClass(modelClass);
+		Class<?> proxiedClass = MVPUtil.getProxiedClass(modelClass);
 		return dependencyClasses.contains(proxiedClass);
 	}
 	

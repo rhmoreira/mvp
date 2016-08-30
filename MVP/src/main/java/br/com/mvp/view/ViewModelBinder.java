@@ -69,9 +69,6 @@ public class ViewModelBinder {
 		ViewModelFieldMatcher matcher = new ViewModelFieldMatcher();
 		List<FieldMatch> matchList = matcher.match(viewClassHandler.getScannedFields(), modelClassHandler.getScannedFields());
 		
-		System.out.print(modelBind.getClass());
-		System.out.println(view.getClass());
-		
 		for (FieldMatch match: matchList)
 			bindings.add(
 					ComponentBindingFactory.createBinding(modelBind, view, match));

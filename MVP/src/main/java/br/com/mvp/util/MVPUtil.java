@@ -1,9 +1,9 @@
-package br.com.mvp;
+package br.com.mvp.util;
 
 import javassist.util.proxy.ProxyFactory;
 
 @SuppressWarnings("unchecked")
-public class Util {
+public class MVPUtil {
 
 
 	public static String capitalize(String str){

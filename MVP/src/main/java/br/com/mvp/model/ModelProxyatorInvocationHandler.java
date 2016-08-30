@@ -4,13 +4,13 @@ import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import br.com.mvp.Util;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
 import br.com.mvp.instrument.MethodHandlerChain;
 import br.com.mvp.instrument.ProxyInvocationHandler;
 import br.com.mvp.instrument.reflection.ClassHandler;
 import br.com.mvp.instrument.reflection.DependencyMapper;
+import br.com.mvp.util.MVPUtil;
 
 public class ModelProxyatorInvocationHandler implements ProxyInvocationHandler {
 
@@ -28,7 +28,7 @@ public class ModelProxyatorInvocationHandler implements ProxyInvocationHandler {
 		DependencyMapper dependencyMapper = classHandler.getDependencyMapper();
 		if (dependencyMapper.isDependency(parameterType)){
 			if (args[0] != null){
-				if (!Util.isProxiedClass(args[0].getClass())){
+				if (!MVPUtil.isProxiedClass(args[0].getClass())){
 					Object proxiedModel = createModelReplacement(args[0]);
 					BeanUtils.copyProperties(proxiedModel, args[0]);
 					args[0] = proxiedModel;
@@ -39,7 +39,7 @@ public class ModelProxyatorInvocationHandler implements ProxyInvocationHandler {
 	}
 	
 	private Object createModelReplacement(Object model) throws Exception {
-		Instrumentator<Object> instrumentator = InstrumentatorFactory.create(Util.getProxiedClass(model));
+		Instrumentator<Object> instrumentator = InstrumentatorFactory.create(MVPUtil.getProxiedClass(model));
 		return instrumentator.newInstance();
 	}
 

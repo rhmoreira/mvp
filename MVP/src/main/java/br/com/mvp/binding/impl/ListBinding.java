@@ -1,20 +1,18 @@
 package br.com.mvp.binding.impl;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListModel;
-
-import org.apache.commons.beanutils.ConstructorUtils;
 
 import br.com.mvp.binding.listener.ListListener;
-import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ModelCollector;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
-import br.com.mvp.view.annotation.List;
+import br.com.mvp.view.annotation.VList;
 
 public class ListBinding extends ComponentBinding<JList<Object>> {
 
@@ -28,11 +26,8 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 	@Override
 	protected void finallyBind(JList<Object> component) throws Exception {
 		
-		List componentAnnotation = (List) fieldMatch.getModelAnnotation();
-		
-		DefaultListModel<? extends Object> listModel = ConstructorUtils
-				.invokeConstructor(componentAnnotation.model(), new Object[]{});
-		component.setModel((ListModel<Object>) listModel);
+		VList componentAnnotation = (VList) fieldMatch.getModelAnnotation();
+		DefaultListModel<Object> listModel = (DefaultListModel<Object>) component.getModel();
 
 		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
 			component.addListSelectionListener(listener);
@@ -43,9 +38,11 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 	@Override
 	public void updateView() {
 		try{
-			Field modelField = fieldMatch.getModelField();
-			Collection<?> values = ReflectionUtils.getFieldValue(modelInstance, modelField);
+			Collection<Object> values = (Collection<Object>) getModelValue();
 			DefaultListModel<?> listModel = (DefaultListModel<?>) getComponent().getModel();
+			
+			JListUtil<Object> jListUtil = new JListUtil<>(getComponent());
+			jListUtil.addValues(new LinkedHashSet<>(values));
 			
 			int[] indexes = new int[values.size()];
 			int counter = 0;
@@ -60,6 +57,14 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 
 	@Override
 	public void updateModel() {
+		VList componentAnnotation = (VList) fieldMatch.getModelAnnotation();
+		Collection<Object> values = new HashSet<>();
+		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
+			values.addAll(getComponent().getSelectedValuesList());
+		else{
+			JListUtil<Object> jListUtil = new JListUtil<>(getComponent());					
+			values.addAll(jListUtil.getValues());
+		}
 	}
 
 	@Override

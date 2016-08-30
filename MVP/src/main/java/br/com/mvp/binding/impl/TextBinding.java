@@ -21,15 +21,16 @@ public class TextBinding extends ComponentBinding<JTextComponent> {
 	}
 
 	@Override
-	public void updateView() {
-		// TODO Auto-generated method stub
-		
+	public void updateView() throws Exception {
+		JTextComponent textComponent = getComponent();
+		Object value = getModelValue();
+		textComponent.setText(value == null ? null : value.toString());
 	}
 
 	@Override
-	public void updateModel() {
-		// TODO Auto-generated method stub
-		
+	public void updateModel() throws Exception {
+		JTextComponent textComponent = getComponent();
+		setModelValue(textComponent.getText());
 	}
 
 	@Override

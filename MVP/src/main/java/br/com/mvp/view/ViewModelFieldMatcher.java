@@ -55,20 +55,11 @@ public class ViewModelFieldMatcher {
 		public Field getViewField() {
 			return viewField;
 		}
-		public void setViewField(Field viewField) {
-			this.viewField = viewField;
-		}
 		public Field getModelField() {
 			return modelField;
 		}
-		public void setModelField(Field modelField) {
-			this.modelField = modelField;
-		}
 		public Annotation getModelAnnotation() {
 			return modelAnnotation;
-		}
-		public void setModelAnnotation(Annotation modelAnnotation) {
-			this.modelAnnotation = modelAnnotation;
 		}
 		
 		@Override

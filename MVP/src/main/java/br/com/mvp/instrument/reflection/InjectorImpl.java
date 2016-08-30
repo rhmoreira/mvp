@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.mvp.Util;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
+import br.com.mvp.util.MVPUtil;
 
 class InjectorImpl implements Injector {
 
@@ -25,7 +25,7 @@ class InjectorImpl implements Injector {
 	public void inject(Object target, Map<Field, Class<?>> dependencyMap, MemberHandler memberHandler) throws Exception {
 		Map<Class<?>, Object> instanceCacheL1 = new HashMap<>();
 		
-		instanceCacheL1.put(Util.getProxiedClass(target), target);
+		instanceCacheL1.put(MVPUtil.getProxiedClass(target), target);
 		
 		dependencyMap
 			.entrySet()
