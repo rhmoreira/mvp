@@ -1,16 +1,13 @@
 package br.com.mvp.binding.listener;
 
-import java.lang.reflect.Field;
-
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
-import org.apache.commons.beanutils.ConstructorUtils;
-
+import br.com.mvp.binding.impl.TextConverter;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
-import br.com.mvp.view.annotation.Numeric;
+import br.com.mvp.view.annotation.Text;
 
 public class TextDocumentListener extends Listener implements DocumentListener {
 	
@@ -29,14 +26,13 @@ public class TextDocumentListener extends Listener implements DocumentListener {
 	@Override
 	public void changedUpdate(DocumentEvent event) {
 		try{
-			Field modelField = fieldMatch.getModelField();
 			Document document = event.getDocument();
 			Object value = document.getText(0, document.getLength());
 			
-			if (fieldMatch.getModelAnnotation().annotationType() == Numeric.class)
-				value = ConstructorUtils.invokeConstructor(modelField.getType(), value);
+			Text text = (Text) fieldMatch.getModelAnnotation();
+			TextConverter converter = new TextConverter(text.convertNumber().type(), text.convertNumber().decimalDigits(), value.toString());
 			
-			updateModel(value);
+			updateModel(converter.convert());
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

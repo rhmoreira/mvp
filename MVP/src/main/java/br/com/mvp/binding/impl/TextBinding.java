@@ -6,6 +6,7 @@ import javax.swing.text.JTextComponent;
 
 import br.com.mvp.binding.listener.TextDocumentListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.annotation.Text;
 
 public class TextBinding extends ComponentBinding<JTextComponent> {
 	
@@ -29,8 +30,16 @@ public class TextBinding extends ComponentBinding<JTextComponent> {
 
 	@Override
 	public void updateModel() throws Exception {
+		setModelValue(getComponentValue());
+	}
+	
+	private Object getComponentValue(){
 		JTextComponent textComponent = getComponent();
-		setModelValue(textComponent.getText());
+		Object value = textComponent.getText();
+		Text text = (Text) fieldMatch.getModelAnnotation();
+		TextConverter converter = new TextConverter(text.convertNumber().type(), text.convertNumber().decimalDigits(), value.toString());
+		
+		return converter.convert();
 	}
 
 	@Override

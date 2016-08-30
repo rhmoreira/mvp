@@ -12,4 +12,6 @@ import java.lang.annotation.Target;
 public @interface Text {
 
 	String fieldName() default "";
+	
+	Converter convertNumber() default @Converter;
 }

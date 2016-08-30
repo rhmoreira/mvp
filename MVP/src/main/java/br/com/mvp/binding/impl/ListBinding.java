@@ -12,7 +12,7 @@ import br.com.mvp.binding.listener.ListListener;
 import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ModelCollector;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
-import br.com.mvp.view.annotation.VList;
+import br.com.mvp.view.annotation.ViewList;
 
 public class ListBinding extends ComponentBinding<JList<Object>> {
 
@@ -26,7 +26,7 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 	@Override
 	protected void finallyBind(JList<Object> component) throws Exception {
 		
-		VList componentAnnotation = (VList) fieldMatch.getModelAnnotation();
+		ViewList componentAnnotation = (ViewList) fieldMatch.getModelAnnotation();
 		DefaultListModel<Object> listModel = (DefaultListModel<Object>) component.getModel();
 
 		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
@@ -57,7 +57,7 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 
 	@Override
 	public void updateModel() {
-		VList componentAnnotation = (VList) fieldMatch.getModelAnnotation();
+		ViewList componentAnnotation = (ViewList) fieldMatch.getModelAnnotation();
 		Collection<Object> values = new HashSet<>();
 		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
 			values.addAll(getComponent().getSelectedValuesList());

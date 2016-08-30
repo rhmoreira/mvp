@@ -1,5 +1,7 @@
 package br.com.mvp.util;
 
+import java.math.BigDecimal;
+
 import javassist.util.proxy.ProxyFactory;
 
 @SuppressWarnings("unchecked")
@@ -53,6 +55,18 @@ public class MVPUtil {
 			return false;
 		
 		return ProxyFactory.isProxyClass(clazz);
+	}
+	
+	public static String onlyDigits(String str){
+		return str.replaceAll("[^\\d]", "");
+	}
+	
+	public static BigDecimal commaLeft(BigDecimal number, int nTimes){
+		if (nTimes > 0)
+			for (int i=0; i < nTimes; i++)
+				number = number.divide(BigDecimal.TEN);
+		
+		return number;
 	}
 	
 }

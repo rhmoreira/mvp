@@ -11,7 +11,7 @@ import br.com.mvp.view.ModelCollector;
 @View
 @Target({FIELD})
 @Retention(RUNTIME)
-public @interface VList {
+public @interface ViewList {
 
 	String fieldName() default "";
 	

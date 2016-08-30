@@ -8,6 +8,8 @@ import br.com.mvp.binding.Bind;
 import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
+import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.util.MVPUtil;
 import br.com.mvp.view.ViewModelBinder;
 import br.com.mvp.view.annotation.View;
 
@@ -26,20 +28,26 @@ public class MVP<V extends JPanel, M> {
 			throw new Exception("No models found for view " + viewClass.getName() + 
 					". Specify the model class using the 'model' attribute");
 		
-		M modelInstance = createInstance(InstrumentatorFactory.create(model));
+		M modelInstance = createInstance(model);
 		return createController(jpanel, modelInstance);
 			
 	}
 	
 	public Controller<V, M> createController(V jpanel, M modelInstance) throws Exception{
+		if (!MVPUtil.isProxiedClass(modelInstance.getClass())){
+			M instance = createInstance( (Class<M>) modelInstance.getClass());
+			ReflectionUtils.copyProperties(modelInstance, instance);
+			modelInstance = instance;
+		}
+		
 		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, jpanel);
 		List<Binding> bindingList = vmb.bind();
 		return new ControllerImpl<V, M>(jpanel, modelInstance, bindingList);
 			
 	}
 	
-	private <T> T createInstance(Instrumentator<T> instrumentator) throws Exception {
-		return instrumentator
+	private <T> T createInstance(Class<T> modelClass) throws Exception {
+		return InstrumentatorFactory.create(modelClass)
 				.setupProxy()
 				.newInstance();
 	}
