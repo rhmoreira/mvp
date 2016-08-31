@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 import javax.swing.JList;
 
 import br.com.mvp.view.ModelCollector;
+import br.com.mvp.view.converter.ListConverter;
 import br.com.mvp.view.converter.ListNoConversion;
 
 /**
@@ -25,5 +26,5 @@ public @interface ViewList {
 	
 	ModelCollector collectionType() default ModelCollector.SELECTED;
 	
-	Class<? extends ListNoConversion> converter() default ListNoConversion.class;
+	Class<? extends ListConverter<?, ?>> converter() default ListNoConversion.class;
 }

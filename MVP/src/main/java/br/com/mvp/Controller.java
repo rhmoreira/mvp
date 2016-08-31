@@ -6,6 +6,13 @@ import javax.swing.JPanel;
 
 import br.com.mvp.binding.Binding;
 
+/**
+ * Keep the reference to the view and the model instance, as well the bindings between them
+ * @author renato.moreira
+ *
+ * @param <V>
+ * @param <M>
+ */
 public interface Controller<V extends JPanel, M> {
 
 	/**
