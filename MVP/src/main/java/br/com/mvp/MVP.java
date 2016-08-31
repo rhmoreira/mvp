@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 
 import br.com.mvp.binding.Bind;
 import br.com.mvp.binding.Binding;
-import br.com.mvp.instrument.Instrumentator;
 import br.com.mvp.instrument.InstrumentatorFactory;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.util.MVPUtil;
@@ -24,8 +23,13 @@ public class MVP<V extends JPanel, M> {
 			throw new Exception("View not mapped. Use @br.com.mvp.view.annotation.View to map to a valid model-view class");
 		
 		Class<M> model = (Class<M>) view.model();
+		return createController(jpanel, model);
+			
+	}
+	
+	public Controller<V, M> createController(V jpanel, Class<M> model) throws Exception{
 		if (model == Class.class)
-			throw new Exception("No models found for view " + viewClass.getName() + 
+			throw new Exception("No models found for view " + jpanel.getClass().getName() + 
 					". Specify the model class using the 'model' attribute");
 		
 		M modelInstance = createInstance(model);

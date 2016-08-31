@@ -12,20 +12,21 @@ import javax.swing.event.ListSelectionListener;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.converter.ListConverter;
 
-public class ListListener extends Listener implements ListSelectionListener, ListDataListener {
+public class ListListener extends Listener<ListConverter<Object, Object>> implements ListSelectionListener, ListDataListener {
 
-	public ListListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) {
-		super(modelInstance, viewInstance, fieldMatch);
+	public ListListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch, ListConverter<Object, Object> converter) {
+		super(modelInstance, viewInstance, fieldMatch, converter);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
 		try{
 			if (!event.getValueIsAdjusting()){
-				JList<?> jList = (JList<?>) event.getSource();
-				java.util.List<?> values = jList.isSelectionEmpty() ? Collections.emptyList() : jList.getSelectedValuesList();
-				updateModel(values);
+				JList<Object> jList = (JList<Object>) event.getSource();
+				java.util.List<Object> values = jList.isSelectionEmpty() ? Collections.emptyList() : jList.getSelectedValuesList();
+				updateModel(converter.fromView(values));
 			}
 		}catch (Exception e) {
 			throw new RuntimeException(e);
@@ -47,7 +48,7 @@ public class ListListener extends Listener implements ListSelectionListener, Lis
 		try{
 			JList<Object> jList = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
 			JListUtil<Object> jListUtil = new JListUtil<>(jList);
-			updateModel(jListUtil.getValues());
+			updateModel(converter.fromView(jListUtil.getValues()));
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

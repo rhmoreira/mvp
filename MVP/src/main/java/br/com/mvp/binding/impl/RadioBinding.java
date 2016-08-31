@@ -10,14 +10,15 @@ import javax.swing.JRadioButton;
 
 import br.com.mvp.binding.listener.RadioActionListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.converter.Converter;
 
-public class RadioBinding extends ComponentBinding<Object> {
+public class RadioBinding extends ComponentBinding<Object, Converter<Object, String>> {
 	
 	private ActionListener listener;
 
 	public RadioBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		listener = new RadioActionListener(modelInstance, viewInstance, fieldMatch);
+		listener = new RadioActionListener(modelInstance, viewInstance, fieldMatch, getConverter());
 	}
 	
 	@Override
@@ -47,6 +48,25 @@ public class RadioBinding extends ComponentBinding<Object> {
 	}
 
 	@Override
-	public void undoBinding() {
+	public void unbind() {
+		removeListeners();
+		super.unbind();
+	}
+	
+	private void removeListeners(){
+		if (component instanceof ButtonGroup){
+			Enumeration<AbstractButton> radioEnum = ((ButtonGroup)component).getElements();
+			removeListener(radioEnum);
+		}else if (component instanceof JRadioButton)
+			removeListener(((JRadioButton)component));
+	}
+	
+	private <B extends AbstractButton> void removeListener(Enumeration<B> buttons){
+		while (buttons.hasMoreElements())
+			removeListener(buttons.nextElement());
+	}
+	
+	private <B extends AbstractButton> void removeListener(B button){
+		button.removeActionListener(listener);
 	}
 }

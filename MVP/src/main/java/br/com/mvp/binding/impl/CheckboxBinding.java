@@ -7,14 +7,15 @@ import javax.swing.JPanel;
 
 import br.com.mvp.binding.listener.CheckboxItemListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.converter.Converter;
 
-public class CheckboxBinding extends ComponentBinding<JCheckBox> {
+public class CheckboxBinding extends ComponentBinding<JCheckBox, Converter<Object, Boolean>> {
 
 	private ItemListener itemListener;
 	
 	public CheckboxBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		this.itemListener = new CheckboxItemListener(modelInstance, viewInstance, fieldMatch);
+		this.itemListener = new CheckboxItemListener(modelInstance, viewInstance, fieldMatch, converter);
 	}
 
 	@Override
@@ -36,9 +37,9 @@ public class CheckboxBinding extends ComponentBinding<JCheckBox> {
 	}
 
 	@Override
-	public void undoBinding() {
-		// TODO Auto-generated method stub
-		
+	public void unbind() {
+		getComponent().removeItemListener(itemListener);
+		super.unbind();
 	}
 
 }

@@ -7,14 +7,15 @@ import javax.swing.JPanel;
 
 import br.com.mvp.binding.listener.ComboItemListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.converter.Converter;
 
-public class ComboBinding extends ComponentBinding<JComboBox<Object>> {
+public class ComboBinding extends ComponentBinding<JComboBox<Object>, Converter<Object, Object>> {
 
 	private ItemListener listener;
 	
 	public ComboBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		this.listener = new ComboItemListener(modelInstance, viewInstance, fieldMatch);
+		this.listener = new ComboItemListener(modelInstance, viewInstance, fieldMatch, converter);
 	}
 
 	@Override
@@ -35,8 +36,8 @@ public class ComboBinding extends ComponentBinding<JComboBox<Object>> {
 	}
 
 	@Override
-	public void undoBinding() {
-		// TODO Auto-generated method stub
-		
+	public void unbind() {
+		getComponent().removeItemListener(listener);
+		super.unbind();		
 	}
 }

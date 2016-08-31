@@ -6,15 +6,15 @@ import javax.swing.text.JTextComponent;
 
 import br.com.mvp.binding.listener.TextDocumentListener;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
-import br.com.mvp.view.annotation.Text;
+import br.com.mvp.view.converter.Converter;
 
-public class TextBinding extends ComponentBinding<JTextComponent> {
+public class TextBinding extends ComponentBinding<JTextComponent, Converter<Object, String>> {
 	
 	private DocumentListener documentListener;
 
 	public TextBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		this.documentListener = new TextDocumentListener(modelInstance, viewInstance, fieldMatch);
+		this.documentListener = new TextDocumentListener(modelInstance, viewInstance, fieldMatch, getConverter());
 	}
 
 	protected void finallyBind(JTextComponent textComp){
@@ -25,27 +25,20 @@ public class TextBinding extends ComponentBinding<JTextComponent> {
 	public void updateView() throws Exception {
 		JTextComponent textComponent = getComponent();
 		Object value = getModelValue();
-		textComponent.setText(value == null ? null : value.toString());
+		textComponent.setText((String) getConverter().fromModel(value));
 	}
 
 	@Override
 	public void updateModel() throws Exception {
-		setModelValue(getComponentValue());
+		JTextComponent textComponent = getComponent();
+		String value = textComponent.getText();
+		setModelValue(getConverter().fromView(value));
 	}
 	
-	private Object getComponentValue(){
-		JTextComponent textComponent = getComponent();
-		Object value = textComponent.getText();
-		Text text = (Text) fieldMatch.getModelAnnotation();
-		TextConverter converter = new TextConverter(text.convertNumber().type(), text.convertNumber().decimalDigits(), value.toString());
-		
-		return converter.convert();
-	}
-
 	@Override
-	public void undoBinding() {
-		// TODO Auto-generated method stub
-		
+	public void unbind() {
+		getComponent().getDocument().removeDocumentListener(documentListener);
+		super.unbind();
 	}
 
 }

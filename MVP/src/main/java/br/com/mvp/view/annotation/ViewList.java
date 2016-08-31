@@ -7,6 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import br.com.mvp.view.ModelCollector;
+import br.com.mvp.view.converter.ListNoConvertion;
 
 @View
 @Target({FIELD})
@@ -16,4 +17,6 @@ public @interface ViewList {
 	String fieldName() default "";
 	
 	ModelCollector collectionType() default ModelCollector.SELECTED;
+	
+	Class<? extends ListNoConvertion> converter() default ListNoConvertion.class;
 }

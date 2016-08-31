@@ -38,6 +38,10 @@ class ControllerImpl<V extends JPanel, M> implements Controller<V, M> {
 	public void updateView() throws Exception {
 		for (Binding b: bindings)
 			b.updateView();
-		
+	}
+
+	@Override
+	public List<Binding> getBindings() {
+		return bindings;
 	}
 }

@@ -8,5 +8,5 @@ public interface Binding {
 	Object getView();
 	Object getModel();
 	
-	void undoBinding();
+	void unbind();
 }

@@ -13,14 +13,15 @@ import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ModelCollector;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.ViewList;
+import br.com.mvp.view.converter.ListConverter;
 
-public class ListBinding extends ComponentBinding<JList<Object>> {
+public class ListBinding extends ComponentBinding<JList<Object>, ListConverter<Object, Object>> {
 
 	private ListListener listener;
 	
 	public ListBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super(modelInstance, viewInstance, fieldMatch);
-		this.listener = new ListListener(modelInstance, viewInstance, fieldMatch);
+		this.listener = new ListListener(modelInstance, viewInstance, fieldMatch, getConverter());
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 	@Override
 	public void updateView() {
 		try{
-			Collection<Object> values = (Collection<Object>) getModelValue();
+			Collection<Object> values = getConverter().fromModel(getModelValue());
 			DefaultListModel<?> listModel = (DefaultListModel<?>) getComponent().getModel();
 			
 			JListUtil<Object> jListUtil = new JListUtil<>(getComponent());
@@ -68,7 +69,10 @@ public class ListBinding extends ComponentBinding<JList<Object>> {
 	}
 
 	@Override
-	public void undoBinding() {
+	public void unbind() {
+		getComponent().removeListSelectionListener(listener);
+		getComponent().getModel().removeListDataListener(listener);
+		super.unbind();
 	}
 
 	

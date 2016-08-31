@@ -1,17 +1,24 @@
 package br.com.mvp.binding.impl;
 
+import java.lang.annotation.Annotation;
+
 import javax.swing.JPanel;
+
+import org.apache.commons.beanutils.ConstructorUtils;
+import org.apache.commons.beanutils.MethodUtils;
 
 import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.converter.Converter;
 
-public abstract class ComponentBinding<C> implements Binding {
+public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements Binding {
 
 	protected Object modelInstance;
 	protected JPanel viewInstance;
 	protected FieldMatch fieldMatch;
-	protected C component;
+	protected VC component;
+	protected C converter;
 
 	public ComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
 		super();
@@ -20,13 +27,20 @@ public abstract class ComponentBinding<C> implements Binding {
 		this.fieldMatch = fieldMatch;
 		
 		component = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+		createConverter(fieldMatch.getModelAnnotation());
+	}
+	
+	private void createConverter(Annotation a) throws Exception{
+		Object[] args = new Object[]{};
+		Class<C> converterClass =  (Class<C>) MethodUtils.invokeMethod(a, "converter", args);
+		converter = ConstructorUtils.invokeConstructor(converterClass, args);
 	}
 	
 	public final void finallyBind() throws Exception{
 		finallyBind(component);
 	}
 	
-	protected abstract void finallyBind(C component) throws Exception;
+	protected abstract void finallyBind(VC component) throws Exception;
 
 	@Override
 	public Object getView(){
@@ -38,7 +52,16 @@ public abstract class ComponentBinding<C> implements Binding {
 		return modelInstance;
 	}
 	
-	protected C getComponent(){
+	@Override
+	public void unbind() {
+		modelInstance = null;
+		viewInstance = null;
+		fieldMatch = null;
+		component = null;
+		converter = null;		
+	}
+	
+	protected VC getComponent(){
 		return component;
 	}
 	
@@ -48,5 +71,21 @@ public abstract class ComponentBinding<C> implements Binding {
 	
 	protected void setModelValue(Object value) throws Exception{
 		ReflectionUtils.setFieldValue(modelInstance, value, fieldMatch.getModelField());
+	}
+
+	public Object getModelInstance() {
+		return modelInstance;
+	}
+
+	public JPanel getViewInstance() {
+		return viewInstance;
+	}
+
+	public FieldMatch getFieldMatch() {
+		return fieldMatch;
+	}
+
+	public C getConverter() {
+		return converter;
 	}
 }

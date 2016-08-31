@@ -6,6 +6,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import br.com.mvp.view.converter.Converter;
+import br.com.mvp.view.converter.SimpleNoConvertion;
+
 @View
 @Target({FIELD})
 @Retention(RUNTIME)
@@ -13,5 +16,5 @@ public @interface Text {
 
 	String fieldName() default "";
 	
-	Converter convertNumber() default @Converter;
+	Class<? extends Converter<?,?>> converter() default SimpleNoConvertion.class;
 }

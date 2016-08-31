@@ -39,7 +39,7 @@ public final class ComponentBindingFactory {
 		Class<? extends Binding> bindingClass = 
 				annotationBindingMap.get(match.getModelAnnotation().annotationType());
 		
-		ComponentBinding<?> binding = (ComponentBinding<?>) ConstructorUtils
+		ComponentBinding<?,?> binding = (ComponentBinding<?,?>) ConstructorUtils
 				.invokeConstructor(bindingClass, new Object[]{model, view, match});
 		binding.finallyBind();
 		return binding;
