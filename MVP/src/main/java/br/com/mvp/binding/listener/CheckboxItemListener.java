@@ -20,7 +20,7 @@ public class CheckboxItemListener extends Listener<Converter<Object, Boolean>> i
 	public void itemStateChanged(ItemEvent event) {
 		try{
 			JCheckBox chck = (JCheckBox) event.getSource();
-			updateModel(converter.fromView(chck.isSelected()));
+			updateModel(chck.isSelected());
 			
 		}catch (Exception e) {
 			throw new RuntimeException(e);

@@ -20,7 +20,7 @@ public class RadioActionListener extends Listener<Converter<Object, String>> imp
 		try{
 			JRadioButton radio = (JRadioButton) event.getSource();
 			String text = radio.getText();
-			updateModel(converter.fromView(text));
+			updateModel(text);
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

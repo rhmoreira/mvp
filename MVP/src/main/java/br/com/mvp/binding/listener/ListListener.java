@@ -26,7 +26,7 @@ public class ListListener extends Listener<ListConverter<Object, Object>> implem
 			if (!event.getValueIsAdjusting()){
 				JList<Object> jList = (JList<Object>) event.getSource();
 				java.util.List<Object> values = jList.isSelectionEmpty() ? Collections.emptyList() : jList.getSelectedValuesList();
-				updateModel(converter.fromView(values));
+				updateModel(values);
 			}
 		}catch (Exception e) {
 			throw new RuntimeException(e);
@@ -48,7 +48,7 @@ public class ListListener extends Listener<ListConverter<Object, Object>> implem
 		try{
 			JList<Object> jList = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
 			JListUtil<Object> jListUtil = new JListUtil<>(jList);
-			updateModel(converter.fromView(jListUtil.getValues()));
+			updateModel(jListUtil.getValues());
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

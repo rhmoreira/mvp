@@ -22,51 +22,59 @@ public class RadioBinding extends ComponentBinding<Object, Converter<Object, Str
 	}
 	
 	@Override
-	protected void finallyBind(Object component) {
-		if (component instanceof ButtonGroup){
-			Enumeration<AbstractButton> radioEnum = ((ButtonGroup)component).getElements();
-			configureListener(radioEnum);
-		}else if (component instanceof JRadioButton)
-			configureListener(((JRadioButton)component));
+	protected void finallyBind(Object component) throws Exception {
+		RadioButtonManipulator<AbstractButton> manipulator = (t) -> t.addActionListener(listener);
+		doAction(manipulator);
 	}
 	
-	private <B extends AbstractButton> void configureListener(Enumeration<B> btnEnum){
-		while (btnEnum.hasMoreElements())
-			configureListener(btnEnum.nextElement());
-	}
-	
-	private <B extends AbstractButton> void configureListener(B button){
-		button.addActionListener(listener);
+	private void removeListeners() throws Exception{
+		RadioButtonManipulator<AbstractButton> manipulator = (t) -> t.removeActionListener(listener);
+		doAction(manipulator);
 	}
 	
 	@Override
-	public void updateView() {
+	public void updateView() throws Exception {
+		RadioButtonManipulator<AbstractButton> manipulator = (t) -> {
+			String value = (String) RadioBinding.this.getModelValue();
+			if (t.getText().equals(value))
+				t.setSelected(true);
+			else
+				t.setSelected(false);
+		};
+		doAction(manipulator);
 	}
 
 	@Override
-	public void updateModel() {
+	public void updateModel() throws Exception {
+		RadioButtonManipulator<AbstractButton> manipulator = (t) -> RadioBinding.this.setModelValue(t.getText());
+		doAction(manipulator);
 	}
 
 	@Override
 	public void unbind() {
-		removeListeners();
-		super.unbind();
+		try {
+			removeListeners();
+			super.unbind();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void removeListeners(){
+	private void doAction(RadioButtonManipulator<AbstractButton> manipulator) throws Exception{
 		if (component instanceof ButtonGroup){
 			Enumeration<AbstractButton> radioEnum = ((ButtonGroup)component).getElements();
-			removeListener(radioEnum);
+			manipulator.manipulate(radioEnum);
 		}else if (component instanceof JRadioButton)
-			removeListener(((JRadioButton)component));
+			manipulator.manipulate(((JRadioButton)component));
 	}
 	
-	private <B extends AbstractButton> void removeListener(Enumeration<B> buttons){
-		while (buttons.hasMoreElements())
-			removeListener(buttons.nextElement());
-	}
-	
-	private <B extends AbstractButton> void removeListener(B button){
-		button.removeActionListener(listener);
+	@FunctionalInterface
+	private interface RadioButtonManipulator<T>{
+		public void manipulate(T t) throws Exception;
+		
+		default void manipulate(Enumeration<T> elements) throws Exception{
+			while (elements.hasMoreElements())
+				manipulate(elements.nextElement());
+		}
 	}
 }

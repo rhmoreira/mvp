@@ -27,7 +27,7 @@ public class CheckboxBinding extends ComponentBinding<JCheckBox, Converter<Objec
 	public void updateView() throws Exception {
 		JCheckBox checkBox = getComponent();
 		Object value = getModelValue();
-		checkBox.setSelected(value != null ? (Boolean) value : false);
+		checkBox.setSelected( value == null ? false : (Boolean) value);
 	}
 
 	@Override

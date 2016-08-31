@@ -12,6 +12,7 @@ import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
+@SuppressWarnings("unchecked")
 public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements Binding {
 
 	protected Object modelInstance;
@@ -66,10 +67,12 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	}
 	
 	protected Object getModelValue() throws Exception{
-		return ReflectionUtils.getFieldValue(modelInstance, fieldMatch.getModelField());
+		Object fieldValue = ReflectionUtils.getFieldValue(modelInstance, fieldMatch.getModelField());
+		return ((Converter<Object, Object>)converter).fromModel(fieldValue);
 	}
 	
 	protected void setModelValue(Object value) throws Exception{
+		value = ((Converter<Object, Object>)converter).fromView(value);
 		ReflectionUtils.setFieldValue(modelInstance, value, fieldMatch.getModelField());
 	}
 

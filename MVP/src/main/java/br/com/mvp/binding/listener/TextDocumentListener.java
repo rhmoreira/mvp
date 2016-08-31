@@ -27,7 +27,7 @@ public class TextDocumentListener extends Listener<Converter<Object, String>> im
 		try{
 			Document document = event.getDocument();
 			String value = document.getText(0, document.getLength());
-			updateModel(converter.fromView(value));
+			updateModel(value);
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -24,15 +24,14 @@ public class TextBinding extends ComponentBinding<JTextComponent, Converter<Obje
 	@Override
 	public void updateView() throws Exception {
 		JTextComponent textComponent = getComponent();
-		Object value = getModelValue();
-		textComponent.setText((String) getConverter().fromModel(value));
+		textComponent.setText((String) getModelValue());
 	}
 
 	@Override
 	public void updateModel() throws Exception {
 		JTextComponent textComponent = getComponent();
 		String value = textComponent.getText();
-		setModelValue(getConverter().fromView(value));
+		setModelValue(value);
 	}
 	
 	@Override

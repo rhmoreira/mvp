@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.beanutils.MethodUtils;
 
 import br.com.mvp.instrument.reflection.ReflectionUtils;
-import br.com.mvp.view.annotation.View;
+import br.com.mvp.view.annotation.Model;
 
 public class ViewModelFieldMatcher {
 
@@ -27,7 +27,7 @@ public class ViewModelFieldMatcher {
 		String viewFieldName = vField.getName();
 		String mappedName = mField.getName();
 		
-		Annotation a = ReflectionUtils.getStereotypedAnnotation(View.class, mField);
+		Annotation a = ReflectionUtils.getStereotypedAnnotation(Model.class, mField);
 		if (a != null){
 			String fieldName = (String) MethodUtils.invokeMethod(a, "fieldName", new Object[]{});
 			if (!fieldName.equals(""))
@@ -49,7 +49,7 @@ public class ViewModelFieldMatcher {
 			super();
 			this.viewField = viewField;
 			this.modelField = modelField;
-			this.modelAnnotation = ReflectionUtils.getStereotypedAnnotation(View.class, modelField);
+			this.modelAnnotation = ReflectionUtils.getStereotypedAnnotation(Model.class, modelField);
 		}
 		
 		public Field getViewField() {

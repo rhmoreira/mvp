@@ -18,7 +18,7 @@ public class ComboItemListener extends Listener<Converter<Object, Object>> imple
 	public void itemStateChanged(ItemEvent event) {
 		try{
 			if (event.getStateChange() == ItemEvent.SELECTED)
-				updateModel(converter.fromView(event.getItem()));
+				updateModel(event.getItem());
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}

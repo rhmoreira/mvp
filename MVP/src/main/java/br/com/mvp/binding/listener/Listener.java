@@ -30,6 +30,8 @@ public abstract class Listener<C extends Converter<?, ?>> {
 		MethodHandler setter = modelClassHandler
 				.getMemberHandler()
 				.setterMethodForField(fieldMatch.getModelField());
+		
+		value = ((Converter<Object, Object>)converter).fromView(value);
 		setter.invoke(modelInstance, value);
 	}
 }

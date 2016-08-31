@@ -39,7 +39,7 @@ public class ListBinding extends ComponentBinding<JList<Object>, ListConverter<O
 	@Override
 	public void updateView() {
 		try{
-			Collection<Object> values = getConverter().fromModel(getModelValue());
+			Collection<Object> values = (Collection<Object>) getModelValue();
 			DefaultListModel<?> listModel = (DefaultListModel<?>) getComponent().getModel();
 			
 			JListUtil<Object> jListUtil = new JListUtil<>(getComponent());
@@ -57,7 +57,7 @@ public class ListBinding extends ComponentBinding<JList<Object>, ListConverter<O
 	}
 
 	@Override
-	public void updateModel() {
+	public void updateModel() throws Exception {
 		ViewList componentAnnotation = (ViewList) fieldMatch.getModelAnnotation();
 		Collection<Object> values = new HashSet<>();
 		if (componentAnnotation.collectionType() == ModelCollector.SELECTED)
@@ -66,6 +66,8 @@ public class ListBinding extends ComponentBinding<JList<Object>, ListConverter<O
 			JListUtil<Object> jListUtil = new JListUtil<>(getComponent());					
 			values.addAll(jListUtil.getValues());
 		}
+		
+		setModelValue(values);
 	}
 
 	@Override
