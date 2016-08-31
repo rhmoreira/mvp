@@ -6,15 +6,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import br.com.mvp.view.converter.Converter;
-import br.com.mvp.view.converter.SimpleNoConvertion;
+import javax.swing.JCheckBox;
 
-@View
+import br.com.mvp.view.converter.Converter;
+import br.com.mvp.view.converter.SimpleNoConversion;
+
+/**
+ * Model annotation for {@link JCheckBox} components
+ * @author Renato
+ *
+ */
+@Model
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface Checkbox {
 
 	String fieldName() default "";
 	
-	Class<? extends Converter<?,?>> converter() default SimpleNoConvertion.class;
+	Class<? extends Converter<?,?>> converter() default SimpleNoConversion.class;
 }

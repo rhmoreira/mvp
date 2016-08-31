@@ -6,10 +6,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import br.com.mvp.view.ModelCollector;
-import br.com.mvp.view.converter.ListNoConvertion;
+import javax.swing.JList;
 
-@View
+import br.com.mvp.view.ModelCollector;
+import br.com.mvp.view.converter.ListNoConversion;
+
+/**
+ * Model annotation for {@link JList} components
+ * @author Renato
+ *
+ */
+@Model
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface ViewList {
@@ -18,5 +25,5 @@ public @interface ViewList {
 	
 	ModelCollector collectionType() default ModelCollector.SELECTED;
 	
-	Class<? extends ListNoConvertion> converter() default ListNoConvertion.class;
+	Class<? extends ListNoConversion> converter() default ListNoConversion.class;
 }

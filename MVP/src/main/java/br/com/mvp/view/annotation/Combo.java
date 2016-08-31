@@ -6,16 +6,23 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import br.com.mvp.view.converter.Converter;
-import br.com.mvp.view.converter.SimpleNoConvertion;
+import javax.swing.JComboBox;
 
-@View
+import br.com.mvp.view.converter.Converter;
+import br.com.mvp.view.converter.SimpleNoConversion;
+
+/**
+ * Model annotation for {@link JComboBox} components
+ * @author Renato
+ *
+ */
+@Model
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface Combo {
 
 	String fieldName() default "";
 
-	Class<? extends Converter<?,?>> converter() default SimpleNoConvertion.class;
+	Class<? extends Converter<?,?>> converter() default SimpleNoConversion.class;
 	
 }

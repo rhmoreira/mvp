@@ -2,7 +2,12 @@ package br.com.mvp.view.converter;
 
 import java.util.Collection;
 
-public class ListNoConvertion implements ListConverter<Collection<Object>, Object> {
+/**
+ * Default converter Class if no conversion needs to be done.
+ * @author Renato
+ *
+ */
+public class ListNoConversion implements ListConverter<Collection<Object>, Object> {
 
 	@Override
 	public Collection<Object> fromView(Collection<Object> value) {

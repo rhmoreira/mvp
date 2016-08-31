@@ -1,6 +1,10 @@
 package br.com.mvp.view.converter;
 
-public class SimpleNoConvertion implements Converter<Object,Object>{
+/**
+ * Default converter Class if no conversion needs to be done.
+ * @author Renato
+ */
+public class SimpleNoConversion implements Converter<Object,Object>{
 
 	@Override
 	public Object fromView(Object value) {

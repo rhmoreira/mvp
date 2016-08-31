@@ -6,15 +6,21 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import br.com.mvp.view.converter.Converter;
-import br.com.mvp.view.converter.SimpleNoConvertion;
+import javax.swing.text.JTextComponent;
 
-@View
+import br.com.mvp.view.converter.Converter;
+import br.com.mvp.view.converter.SimpleNoConversion;
+
+/**
+ * Model annotation for any subclass of {@link JTextComponent} components
+ * @author Renato
+ */
+@Model
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface Text {
 
 	String fieldName() default "";
 	
-	Class<? extends Converter<?,?>> converter() default SimpleNoConvertion.class;
+	Class<? extends Converter<?,?>> converter() default SimpleNoConversion.class;
 }

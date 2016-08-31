@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 
 import br.com.mvp.instrument.reflection.ClassMemberFilter;
 import br.com.mvp.view.annotation.Model;
-import br.com.mvp.view.annotation.View;
 
 class ModelClassFilter implements ClassMemberFilter{
 
@@ -18,7 +17,7 @@ class ModelClassFilter implements ClassMemberFilter{
 		@Override
 		public boolean accept(Field field) {
 			for (Annotation a: field.getAnnotations())
-				if (((Annotation)a).annotationType().isAnnotationPresent(View.class))
+				if (((Annotation)a).annotationType().isAnnotationPresent(Model.class))
 					return true;
 			
 			return accept(field.getType());
