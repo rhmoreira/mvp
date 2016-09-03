@@ -3,12 +3,15 @@ package br.com.mvp.view;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import br.com.mvp.Controller;
 import br.com.mvp.MVP;
+import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 
 /**
@@ -25,17 +28,20 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	
 	private Controller<V, M> controller;
 	private Class<M> modelClass;
+	private boolean ready;
+	private ViewAction viewAction;
 	
 	public MVPPanel(Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 	
 	/**
-	 * Creates the controller if its <code>null</code>
+	 * Creates a wrapper for the real controller. The real controller is only injected after the panel's construction is completely finished.
+	 * If not ready, any call to a controller instance method will throw an exception.
 	 * @return
 	 * @throws Exception
 	 */
-	protected Controller<V, M> getController() throws Exception{
+	protected Controller<V, M> getController(){
 		if (controller == null)
 			createController();
 		return controller;
@@ -82,15 +88,31 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 		windowAncestor.dispose();
 	}
 	
-	private void createController() throws Exception{
-		MVP<V, M> mvp = new MVP<>();
-		this.controller = mvp.createController((V)this, modelClass);
+	private void createController(){
+		this.controller = new ControllerWrapper();
 	}
 
 	@Override
 	public void addNotify() {
 		super.addNotify();
 		addWindowAncestorListener();
+		ready = true;
+		if (viewAction != null)
+			viewAction.execute();
+	}
+	
+	/**
+	 * It invokes later on the {@link ViewAction#execute()} inside the overwritten {@link JComponent#addNotify()}.
+	 * Since the {@link MVPPanel#getController()} returns a wrapper of a real {@link Controller} implementation,
+	 * some {@link NullPointerException} can occur, it's recommended to use this method if there is any task that 
+	 * could alter the model and view state during the construction of the swing components.
+	 * @param delayedAction
+	 * @see
+	 * {@link #getController()}<br>
+	 * {@link JComponent#addNotify()}
+	 */
+	public void invokeLater(ViewAction delayedAction){
+		this.viewAction = delayedAction;
 	}
 	
 	private void addWindowAncestorListener(){
@@ -113,5 +135,58 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 			}catch (Exception e) {
 			}
 		}
+	}
+	
+	private class ControllerWrapper implements Controller<V, M>{
+		
+		private Controller<V, M> wrapped;
+
+		@Override
+		public V getView() {
+			try{
+				return getWrapped().getView();
+			}catch (Exception e) {
+				System.out.println("Component is not yet finished. View is null");				
+			}
+			return null;
+		}
+
+		@Override
+		public M getModel() {
+			try{
+				return getWrapped().getModel();
+			}catch (Exception e) {
+				System.out.println("Component is not yet finished. Model is null");
+			}
+			return null;
+		}
+
+		@Override
+		public void updateModel() throws Exception {
+			getWrapped().updateModel();
+		}
+
+		@Override
+		public void updateView() throws Exception {
+			getWrapped().updateView();
+		}
+
+		@Override
+		public List<Binding> getBindings() {
+			return null;
+		}
+		
+		private Controller<V, M> getWrapped() throws Exception{
+			if (!MVPPanel.this.ready)
+				throw new RuntimeException("Component is not completely ");
+			else{
+				if (this.wrapped == null){
+					MVP<V, M> mvp = new MVP<>();
+					this.wrapped = mvp.createController((V)MVPPanel.this, MVPPanel.this.modelClass);
+				}
+				return wrapped;
+			}				
+		}
+		
 	}
 }
