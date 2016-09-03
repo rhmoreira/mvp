@@ -1,6 +1,6 @@
 package br.com.mvp.view;
 
 @FunctionalInterface
-public interface ViewAction {
+public interface DelayedAction {
 	void execute();
 }

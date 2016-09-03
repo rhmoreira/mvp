@@ -29,7 +29,7 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	private Controller<V, M> controller;
 	private Class<M> modelClass;
 	private boolean ready;
-	private ViewAction viewAction;
+	private DelayedAction delayedAction;
 	
 	public MVPPanel(Class<M> modelClass) {
 		this.modelClass = modelClass;
@@ -97,22 +97,37 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 		super.addNotify();
 		addWindowAncestorListener();
 		ready = true;
-		if (viewAction != null)
-			viewAction.execute();
+		if (delayedAction != null)
+			delayedAction.execute();
+		
+		delayedAction = null;
 	}
 	
 	/**
-	 * It invokes later on the {@link ViewAction#execute()} inside the overwritten {@link JComponent#addNotify()}.
-	 * Since the {@link MVPPanel#getController()} returns a wrapper of a real {@link Controller} implementation,
-	 * some {@link NullPointerException} can occur, it's recommended to use this method if there is any task that 
+	 * It invokes later on the {@link DelayedAction#execute()} inside the overwritten {@link JComponent#addNotify()}. <br>
+	 * Since the {@link MVPPanel#getController()} returns a wrapper of a real controller implementation,
+	 * a <code>NullPointerException</code> can occur, it's recommended to use this method if there is any task that 
 	 * could alter the model and view state during the construction of the swing components.
+	 * Here's an example:
+	 * <pre>
+	 * 	<code>
+	 * ... some swing code
+	 * 
+	 * this.setVisible(true);
+	 * 
+	 * invokeLater(() ->{
+	 * 	TheModel preLoadedModel = ...//Some preset model values
+	 * 	{@link #loadModel(preLoadedModel)};
+	 * });
+	 * 	</code>
+	 * </pre>
 	 * @param delayedAction
 	 * @see
 	 * {@link #getController()}<br>
 	 * {@link JComponent#addNotify()}
 	 */
-	public void invokeLater(ViewAction delayedAction){
-		this.viewAction = delayedAction;
+	public void invokeLater(DelayedAction delayedAction){
+		this.delayedAction = delayedAction;
 	}
 	
 	private void addWindowAncestorListener(){
