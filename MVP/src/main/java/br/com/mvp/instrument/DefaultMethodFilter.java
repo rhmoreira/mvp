@@ -8,6 +8,11 @@ class DefaultMethodFilter implements MethodFilter {
 	
 	@Override
 	public boolean isHandled(Method m) {
-		return !m.getName().equals("finalize") || m.isBridge() || m.isSynthetic();
+		return !m.getName().equals("finalize") 
+				|| !m.getName().equals("toString")
+				|| !m.getName().equals("equals")
+				|| !m.getName().equals("hashCode")
+				|| !m.isBridge() 
+				|| !m.isSynthetic();
 	}
 }
