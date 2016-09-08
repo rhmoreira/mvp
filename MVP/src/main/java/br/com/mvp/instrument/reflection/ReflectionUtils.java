@@ -49,13 +49,12 @@ public class ReflectionUtils {
 			 .stream()
 			 .filter(f -> mappedDestFields.containsKey(f.getName()))
 			 .forEach(f -> {
-				 try{
 					 Field destField = mappedDestFields.get(f.getName());
-					 
+				 try{
 					 MethodHandler srcGetter = srcCH.getMemberHandler().getterMethodForField(f);
 					 MethodHandler destSetter = destCH.getMemberHandler().setterMethodForField(destField);
-					 
-					 destSetter.invoke(dest, srcGetter.invoke(src));
+					 if (srcGetter != null && destSetter != null)
+						 destSetter.invoke(dest, srcGetter.invoke(src));
 				 }catch (Exception e) {
 					throw new RuntimeException(e);
 				}

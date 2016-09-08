@@ -32,7 +32,7 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	}
 	
 	private void createConverter(Annotation a) throws Exception{
-		Object[] args = new Object[]{};
+		final Object[] args = new Object[]{};
 		Class<C> converterClass =  (Class<C>) MethodUtils.invokeMethod(a, "converter", args);
 		converter = ConstructorUtils.invokeConstructor(converterClass, args);
 	}
