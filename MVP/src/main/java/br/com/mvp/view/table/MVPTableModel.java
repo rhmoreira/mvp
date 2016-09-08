@@ -67,16 +67,7 @@ public class MVPTableModel<M> extends DefaultTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (!modelList.isEmpty()){
-			M m = modelList.get(0);
-			
-			ColumnMapper<M> columnMapper = mapper.getColumnMapper(columnIndex);
-			ColumnValueResolver<M> valueResolver = columnMapper.getValueResolver();
-			
-			Object value = valueResolver.getColumnValue(m);
-			return value == null ? super.getColumnClass(columnIndex) : value.getClass();
-		}
-		return super.getColumnClass(columnIndex);
+		return getValueAt(0, columnIndex).getClass();
 	}
 	
 	@Override

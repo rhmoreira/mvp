@@ -6,23 +6,25 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-public class ComboBoxCellRenderer extends JComboBox<Object> implements TableCellRenderer {
+public class ComboBoxCellRenderer implements TableCellRenderer {
 	
-	public ComboBoxCellRenderer(Object[] values) {
-		super(values);
+	private JComboBox<?> comboBox;
+	
+	public ComboBoxCellRenderer(JComboBox<?> comboBox) {
+		this.comboBox = comboBox;
 	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 		if (isSelected) {
-			setForeground(table.getSelectionForeground());
-			super.setBackground(table.getSelectionBackground());
+			comboBox.setForeground(table.getSelectionForeground());
+			comboBox.setBackground(table.getSelectionBackground());
 		} else {
-			setForeground(table.getForeground());
-			setBackground(table.getBackground());
+			comboBox.setForeground(table.getForeground());
+			comboBox.setBackground(table.getBackground());
 		}
-		setSelectedItem(value);
-		return this;
+		comboBox.setSelectedItem(value);
+		return comboBox;
 	}
 }
