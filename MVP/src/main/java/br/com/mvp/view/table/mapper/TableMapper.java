@@ -1,4 +1,4 @@
-package br.com.mvp.view.table;
+package br.com.mvp.view.table.mapper;
 
 import java.util.Collection;
 

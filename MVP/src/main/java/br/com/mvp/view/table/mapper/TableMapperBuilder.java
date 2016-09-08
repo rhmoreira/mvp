@@ -1,4 +1,4 @@
-package br.com.mvp.view.table;
+package br.com.mvp.view.table.mapper;
 
 public class TableMapperBuilder<T> {
 
@@ -16,10 +16,14 @@ public class TableMapperBuilder<T> {
 		return instance;
 	}
 	
-	public TableMapperBuilder<T> addColumn(String columnName, ColumnValueResolver<T> valueResolver){
-		ColumnMapper<T> cm = new ColumnMapperImpl<>(currentColumnIndex, columnName, valueResolver);
-		currentColumnIndex += tableMapper.addMapper(cm);
+	public TableMapperBuilder<T> addColumn(String columnName, boolean editable, ColumnValueResolver<T> valueResolver){
+		ColumnMapper<T> cm = new ColumnMapperImpl<>(currentColumnIndex, columnName, editable, valueResolver);
+		currentColumnIndex = tableMapper.addMapper(cm);
 		return this;
+	}
+	
+	public TableMapperBuilder<T> addColumn(String columnName, ColumnValueResolver<T> valueResolver){
+		return addColumn(columnName, false, valueResolver);
 	}
 	
 	public TableMapper<T> build(){

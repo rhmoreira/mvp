@@ -1,15 +1,17 @@
-package br.com.mvp.view.table;
+package br.com.mvp.view.table.mapper;
 
 public class ColumnMapperImpl<T> implements ColumnMapper<T> {
 
 	private int index;
 	private String columnName;
+	private boolean editable;
 	private ColumnValueResolver<T> resolver;
 	
-	public ColumnMapperImpl(int index, String columnName, ColumnValueResolver<T> resolver) {
+	public ColumnMapperImpl(int index, String columnName, boolean editable, ColumnValueResolver<T> resolver) {
 		super();
 		this.index = index;
 		this.columnName = columnName;
+		this.editable = editable;
 		this.resolver = resolver;
 	}
 
@@ -21,6 +23,10 @@ public class ColumnMapperImpl<T> implements ColumnMapper<T> {
 	@Override
 	public String getColumnName() {
 		return columnName;
+	}
+	
+	public boolean isEditable() {
+		return editable;
 	}
 
 	@Override

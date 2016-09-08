@@ -1,47 +1,98 @@
 package br.com.mvp.view.table;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import br.com.mvp.view.table.mapper.ColumnMapper;
+import br.com.mvp.view.table.mapper.ColumnValueResolver;
+import br.com.mvp.view.table.mapper.TableMapper;
+
 public class MVPTableModel<M> extends DefaultTableModel {
 
-	private Collection<M> modelList;
+	private List<M> modelList;
 	private TableMapper<M> mapper;
 	
-	public MVPTableModel(TableMapper<M> mapper, Collection<M> modelList) {
+	public MVPTableModel(TableMapper<M> mapper) {
 		this.mapper = mapper;
-		this.modelList = modelList;
+		this.modelList = new ArrayList<>();
+		
+		update();
+	}
+	
+	public MVPTableModel(TableMapper<M> mapper, List<M> modelList) {
+		this.mapper = mapper;
+		this.modelList = new ArrayList<>(modelList);
 		
 		update();
 	}
 
 	public void update() {
-		int rows = modelList.size();
-		int columns = mapper.getMappers().size();
-		
-		Object[] columnIdentifiers = identifyColumns(columns);
-		updateData(rows, columns, columnIdentifiers);		
+		updateColumns(mapper.getMappers().size());
+		updateData();		
 	}
 	
-	private Object[] identifyColumns(int columns){
-		Object[] columnNames = new Object[columns];
+	private void updateColumns(int columns){
+		Vector<Object> columnNames = new Vector<>(columns);
 		mapper.getMappers()
 			  .stream()
 			  .forEach(cm -> {
-				  columnNames[cm.getColumnIndex()] = cm.getColumnName();
+				  columnNames.add(cm.getColumnIndex(), cm.getColumnName());
 			  });
-		return columnNames;
+		setColumnIdentifiers(columnNames);
 	}
 	
-	private void updateData(int rows, int columns, Object[] columnIdentifiers){
-		Object[][] data = new Object[rows][columns];
-		int i = 0;
-		for (M model: modelList)
-			for (ColumnMapper<M> cm: mapper.getMappers())
-				data[i++][cm.getColumnIndex()] = cm.getValueResolver().getColumnValue(model);
+	private void updateData(){
+		modelList.stream()
+				 .forEach(m -> { addRow(m); });
+	}
+	
+	public void addRow(M modelData) {
+		int columns = mapper.getMappers().size();
+		Vector<Object> rowData = new Vector<>(columns);
+		for (int i = 0; i < columns; i++)
+			rowData.add(i, mapper.getColumnMapper(i).getValueResolver().getColumnValue(modelData));
 		
-		setDataVector(data, columnIdentifiers);
+		super.addRow(rowData);
+		modelList.add(modelData);
+	}
+	
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		return mapper.getColumnMapper(column).isEditable();
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if (!modelList.isEmpty()){
+			M m = modelList.get(0);
+			
+			ColumnMapper<M> columnMapper = mapper.getColumnMapper(columnIndex);
+			ColumnValueResolver<M> valueResolver = columnMapper.getValueResolver();
+			
+			Object value = valueResolver.getColumnValue(m);
+			return value == null ? super.getColumnClass(columnIndex) : value.getClass();
+		}
+		return super.getColumnClass(columnIndex);
+	}
+	
+	@Override
+	public Object getValueAt(int row, int column) {
+		M m = modelList.get(row);
+		ColumnMapper<M> columnMapper = mapper.getColumnMapper(column);
+		return columnMapper.getValueResolver().getColumnValue(m);
+	}
+	
+	@Override
+	public void setValueAt(Object aValue, int row, int column) {
+		super.setValueAt(aValue, row, column);
+		
+		M m = modelList.get(row);
+		ColumnMapper<M> columnMapper = mapper.getColumnMapper(column);
+		columnMapper.getValueResolver().setColumnValue(m, aValue);
 	}
 
 	public Collection<M> getModelList() {
