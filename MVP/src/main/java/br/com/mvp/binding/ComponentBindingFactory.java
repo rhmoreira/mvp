@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPanel;
-
 import org.apache.commons.beanutils.ConstructorUtils;
 
 import br.com.mvp.binding.impl.CheckboxBinding;
@@ -15,6 +13,7 @@ import br.com.mvp.binding.impl.ListBinding;
 import br.com.mvp.binding.impl.RadioBinding;
 import br.com.mvp.binding.impl.TableBinding;
 import br.com.mvp.binding.impl.TextBinding;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.Checkbox;
 import br.com.mvp.view.annotation.Combo;
@@ -38,12 +37,12 @@ public final class ComponentBindingFactory {
 	
 	private ComponentBindingFactory() {}
 	
-	public static Binding createBinding(Object model, JPanel view, FieldMatch match) throws Exception{
+	public static Binding createBinding(ViewModelBind bind, FieldMatch match) throws Exception{
 		Class<? extends Binding> bindingClass = 
 				annotationBindingMap.get(match.getModelAnnotation().annotationType());
 		
 		ComponentBinding<?,?> binding = (ComponentBinding<?,?>) ConstructorUtils
-				.invokeConstructor(bindingClass, new Object[]{model, view, match});
+				.invokeConstructor(bindingClass, new Object[]{bind, match});
 		binding.finallyBind();
 		return binding;
 	}

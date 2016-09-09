@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import br.com.mvp.Controller;
 import br.com.mvp.MVP;
 import br.com.mvp.binding.Binding;
-import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.reflection.ReflectionUtils;
 
 /**
  * Preferred SuperClass for the application View components. It contains useful methods to control the lifecycle of
@@ -33,10 +33,18 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	private boolean ready;
 	private DelayedAction delayedAction;
 	
-	public MVPPanel() {
+	/**
+	 * Calling this constructor causes the MVP to lazy instantiate the model class in the controller.
+	 * If this approach is used, its recommended to call {@link #invokeLater(DelayedAction)} to manipulate
+	 * the model instance.
+	 * @see
+	 * 	MVPPanel#invokeLater(DelayedAction)
+	 */
+	protected MVPPanel() {
 		extractParametrizedModelClass();
+		createController();
 	}
-	
+
 	private void extractParametrizedModelClass() {
 		try{
 			Type genericBaseEntity = getClass().getGenericSuperclass();
@@ -51,7 +59,7 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	 * @return
 	 * @throws Exception
 	 */
-	protected Controller<V, M> getController(){
+	public Controller<V, M> getController(){
 		if (controller == null)
 			createController();
 		return controller;
@@ -101,12 +109,14 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	private void createController(){
 		this.controller = new ControllerWrapper();
 	}
-
+	
 	@Override
 	public void addNotify() {
 		super.addNotify();
 		addWindowAncestorListener();
 		ready = true;
+		
+		getController().getModel();
 		if (delayedAction != null)
 			delayedAction.execute();
 		

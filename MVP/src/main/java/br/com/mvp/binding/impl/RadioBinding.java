@@ -5,10 +5,10 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import br.com.mvp.binding.listener.RadioActionListener;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
@@ -16,9 +16,9 @@ public class RadioBinding extends ComponentBinding<Object, Converter<Object, Str
 	
 	private ActionListener listener;
 
-	public RadioBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
-		super(modelInstance, viewInstance, fieldMatch);
-		listener = new RadioActionListener(modelInstance, viewInstance, fieldMatch, getConverter());
+	public RadioBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
+		super(bind, fieldMatch);
+		listener = new RadioActionListener(bind, fieldMatch, getConverter());
 	}
 	
 	@Override

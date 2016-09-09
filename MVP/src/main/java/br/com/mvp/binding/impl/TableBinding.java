@@ -2,9 +2,9 @@ package br.com.mvp.binding.impl;
 
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.ListConverter;
 import br.com.mvp.view.table.MVPJTable;
@@ -14,8 +14,8 @@ public class TableBinding extends ComponentBinding<JTable, ListConverter<Object,
 
 	private boolean valid = true;
 	
-	public TableBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
-		super(modelInstance, viewInstance, fieldMatch);
+	public TableBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
+		super(bind, fieldMatch);
 	}
 
 	@Override

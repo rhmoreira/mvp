@@ -1,10 +1,10 @@
-package br.com.mvp.model;
+package br.com.mvp.view;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import br.com.mvp.instrument.reflection.ClassMemberFilter;
+import br.com.mvp.reflection.ClassMemberFilter;
 import br.com.mvp.view.annotation.Model;
 
 class ModelClassFilter implements ClassMemberFilter{

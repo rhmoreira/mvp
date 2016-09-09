@@ -3,15 +3,14 @@ package br.com.mvp.binding.listener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JPanel;
-
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
 public class ComboItemListener extends Listener<Converter<Object, Object>> implements ItemListener {
 
-	public ComboItemListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch, Converter<Object, Object> converter) {
-		super(modelInstance, viewInstance, fieldMatch, converter);
+	public ComboItemListener(ViewModelBind bind, FieldMatch fieldMatch, Converter<Object, Object> converter) {
+		super(bind, fieldMatch, converter);
 	}
 
 	@Override

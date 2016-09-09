@@ -2,8 +2,6 @@ package br.com.mvp.util;
 
 import java.math.BigDecimal;
 
-import javassist.util.proxy.ProxyFactory;
-
 @SuppressWarnings("unchecked")
 public class MVPUtil {
 
@@ -34,27 +32,6 @@ public class MVPUtil {
 	
 	private static String appendPrefixAndCapitalize(String prefix, String str){
 		return prefix + capitalize(str);
-	}
-	
-	public static <T> Class<? super T> getProxiedClass(T instance){
-		return getProxiedClass((Class<T>)instance.getClass());
-	}
-	
-	public static <T> Class<? super T> getProxiedClass(Class<T> clazz){
-		if (clazz == null)
-			return clazz;
-		
-		if (isProxiedClass(clazz))
-			return clazz.getSuperclass();
-		else
-			return clazz;
-	}
-	
-	public static <T> boolean isProxiedClass(Class<T> clazz){
-		if (clazz == null)
-			return false;
-		
-		return ProxyFactory.isProxyClass(clazz);
 	}
 	
 	public static String onlyDigits(String str){

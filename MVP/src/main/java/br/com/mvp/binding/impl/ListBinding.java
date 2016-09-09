@@ -6,11 +6,11 @@ import java.util.LinkedHashSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 
 import br.com.mvp.binding.listener.ListListener;
 import br.com.mvp.util.JListUtil;
 import br.com.mvp.view.ModelCollector;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.ViewList;
 import br.com.mvp.view.converter.ListConverter;
@@ -19,9 +19,9 @@ public class ListBinding extends ComponentBinding<JList<Object>, ListConverter<O
 
 	private ListListener listener;
 	
-	public ListBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
-		super(modelInstance, viewInstance, fieldMatch);
-		this.listener = new ListListener(modelInstance, viewInstance, fieldMatch, getConverter());
+	public ListBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
+		super(bind, fieldMatch);
+		this.listener = new ListListener(bind, fieldMatch, getConverter());
 	}
 
 	@Override

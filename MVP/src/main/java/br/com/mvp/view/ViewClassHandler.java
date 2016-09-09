@@ -2,7 +2,7 @@ package br.com.mvp.view;
 
 import javax.swing.JPanel;
 
-import br.com.mvp.instrument.reflection.ClassHandler;
+import br.com.mvp.reflection.ClassHandler;
 
 public class ViewClassHandler<V extends JPanel> extends ClassHandler{
 

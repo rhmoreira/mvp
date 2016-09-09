@@ -3,9 +3,9 @@ package br.com.mvp.binding.impl;
 import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 
 import br.com.mvp.binding.listener.ComboItemListener;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
@@ -13,9 +13,9 @@ public class ComboBinding extends ComponentBinding<JComboBox<Object>, Converter<
 
 	private ItemListener listener;
 	
-	public ComboBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
-		super(modelInstance, viewInstance, fieldMatch);
-		this.listener = new ComboItemListener(modelInstance, viewInstance, fieldMatch, converter);
+	public ComboBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
+		super(bind, fieldMatch);
+		this.listener = new ComboItemListener(bind, fieldMatch, converter);
 	}
 
 	@Override

@@ -4,18 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.table.TableRowSorter;
 
-import br.com.mvp.view.table.mapper.ColumnValueResolver;
 import br.com.mvp.view.table.mapper.TableMapper;
 
 @SuppressWarnings("unchecked")
@@ -54,7 +50,24 @@ public class MVPJTable<M> extends JTable {
 		if (row == -1)
 			return null;
 		
-		return getModel().getModelList().get(row);
+		return getModel().getModelList().get(convertRowIndexToModel(row));
+	}
+	
+	public void removeRow(int row) {
+		getModel().removeRow(row);
+	}
+	
+	public void removeRows(int[] rows) {
+		Arrays
+			.stream(rows)
+			.boxed()
+			.map(row -> convertRowIndexToModel(row))
+			.sorted((i1, i2) -> i2.compareTo(i1))//Reverse Order
+			.forEach(row -> removeRow(row));
+	}
+	
+	public void removeSelectedRows(){
+		removeRows(getSelectedRows());
 	}
 	
 	public List<M> getSelectedRowsData() {
@@ -64,44 +77,9 @@ public class MVPJTable<M> extends JTable {
 
 		List<M> data = new ArrayList<>();
 		for (int row: rows)
-			data.add(getModel().getModelList().get(row));
+			data.add(getModel().getModelList().get(convertRowIndexToModel(row)));
 		
 		return data;
-	}
-	
-	@Override
-	public void sorterChanged(RowSorterEvent e) {
-		super.sorterChanged(e);
-		
-		TableRowSorter<MVPTableModel<M>> rowSorter = (TableRowSorter<MVPTableModel<M>>) e.getSource();
-		MVPTableModel<M> model = rowSorter.getModel();
-		
-		if (!rowSorter.getSortKeys().isEmpty()){
-			SortKey sortKey = rowSorter.getSortKeys().get(0);
-			List<M> modelList = model.getModelList();
-			
-			TableMapper<M> mapper = model.getMapper();
-			ColumnValueResolver<M> valueResolver = mapper
-					.getColumnMapper(sortKey.getColumn())
-					.getValueResolver();
-			
-			Comparator<M> c = (m1, m2) -> {
-				switch (sortKey.getSortOrder()) {
-				case ASCENDING:
-					return ((Comparable<Object>)valueResolver.getColumnValue(m1)).compareTo( 
-							(Comparable<Object>)valueResolver.getColumnValue(m2)
-							);
-				case DESCENDING:
-					return ((Comparable<Object>)valueResolver.getColumnValue(m2)).compareTo( 
-						(Comparable<Object>)valueResolver.getColumnValue(m1)
-						);
-				default:
-					return 0;
-				}
-			};
-			
-			modelList.sort(c);
-		}
 	}
 	
 	protected void paintComponent(Graphics g) {

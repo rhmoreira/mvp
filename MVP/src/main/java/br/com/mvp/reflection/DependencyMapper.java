@@ -1,4 +1,4 @@
-package br.com.mvp.instrument.reflection;
+package br.com.mvp.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Map;

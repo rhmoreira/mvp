@@ -1,4 +1,4 @@
-package br.com.mvp.instrument.reflection;
+package br.com.mvp.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import br.com.mvp.instrument.Instrumentator;
-import br.com.mvp.instrument.InstrumentatorFactory;
-import br.com.mvp.util.MVPUtil;
 
 class DependencyMapperImpl implements DependencyMapper{
 
@@ -24,15 +20,6 @@ class DependencyMapperImpl implements DependencyMapper{
 	
 	public void mapModelDependencies() {
 		Map<Field, Class<?>> dependencyMap = filterDependencyClasses();
-		
-		dependencyMap.forEach( (f, c) -> {
-			try {
-				Instrumentator<?> instrumentator = InstrumentatorFactory.create(c);
-				instrumentator.setupProxy();
-			}
-			catch (Exception e) {}
-		});
-		
 		this.dependencyMap = dependencyMap;
 		dependencyClasses = dependencyMap.values();
 	}
@@ -41,8 +28,7 @@ class DependencyMapperImpl implements DependencyMapper{
 	public boolean isDependency(Class<?> modelClass) {
 		if (modelClass == null)
 			return false;
-		Class<?> proxiedClass = MVPUtil.getProxiedClass(modelClass);
-		return dependencyClasses.contains(proxiedClass);
+		return dependencyClasses.contains(modelClass);
 	}
 	
 	@Override

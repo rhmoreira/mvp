@@ -3,9 +3,9 @@ package br.com.mvp.binding.impl;
 import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
 import br.com.mvp.binding.listener.CheckboxItemListener;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
@@ -13,9 +13,9 @@ public class CheckboxBinding extends ComponentBinding<JCheckBox, Converter<Objec
 
 	private ItemListener itemListener;
 	
-	public CheckboxBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
-		super(modelInstance, viewInstance, fieldMatch);
-		this.itemListener = new CheckboxItemListener(modelInstance, viewInstance, fieldMatch, converter);
+	public CheckboxBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
+		super(bind, fieldMatch);
+		this.itemListener = new CheckboxItemListener(bind, fieldMatch, converter);
 	}
 
 	@Override

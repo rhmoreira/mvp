@@ -3,21 +3,21 @@ package br.com.mvp.binding.listener;
 import java.util.Collections;
 
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.reflection.ReflectionUtils;
 import br.com.mvp.util.JListUtil;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.ListConverter;
 
 public class ListListener extends Listener<ListConverter<Object, Object>> implements ListSelectionListener, ListDataListener {
 
-	public ListListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch, ListConverter<Object, Object> converter) {
-		super(modelInstance, viewInstance, fieldMatch, converter);
+	public ListListener(ViewModelBind bind, FieldMatch fieldMatch, ListConverter<Object, Object> converter) {
+		super(bind, fieldMatch, converter);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ListListener extends Listener<ListConverter<Object, Object>> implem
 	@Override
 	public void contentsChanged(ListDataEvent event) {
 		try{
-			JList<Object> jList = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+			JList<Object> jList = ReflectionUtils.getFieldValue(getViewInstance(), fieldMatch.getViewField());
 			JListUtil<Object> jListUtil = new JListUtil<>(jList);
 			updateModel(jListUtil.getValues());
 		}catch (Exception e) {

@@ -4,15 +4,15 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
 public class CheckboxItemListener extends Listener<Converter<Object, Boolean>> implements ItemListener {
 
-	public CheckboxItemListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch, Converter<Object, Boolean> converter) {
-		super(modelInstance, viewInstance, fieldMatch, converter);
+	public CheckboxItemListener(ViewModelBind bind, FieldMatch fieldMatch, Converter<Object, Boolean> converter) {
+		super(bind, fieldMatch, converter);
 	}
 
 	

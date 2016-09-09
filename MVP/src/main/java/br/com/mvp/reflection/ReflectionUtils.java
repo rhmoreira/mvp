@@ -1,13 +1,11 @@
-package br.com.mvp.instrument.reflection;
+package br.com.mvp.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import br.com.mvp.binding.Bind;
-import br.com.mvp.instrument.reflection.MemberHandler.MethodHandler;
-import br.com.mvp.util.MVPUtil;
+import br.com.mvp.reflection.MemberHandler.MethodHandler;
 
 public class ReflectionUtils {
 
@@ -62,10 +60,6 @@ public class ReflectionUtils {
 	}
 	
 	private static ClassHandler createHandler(Object obj) throws Exception{
-		if (MVPUtil.isProxiedClass(obj.getClass()))
-			return ((Bind)obj).getClassHandler(); 
-		else
-			return new ClassHandler(obj.getClass(), Object.class).scan();
-
+		return new ClassHandler(obj.getClass(), Object.class).scan();
 	}
 }

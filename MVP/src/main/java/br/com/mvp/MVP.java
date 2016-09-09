@@ -4,11 +4,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import br.com.mvp.binding.Bind;
+import org.apache.commons.beanutils.ConstructorUtils;
+
 import br.com.mvp.binding.Binding;
-import br.com.mvp.instrument.InstrumentatorFactory;
-import br.com.mvp.instrument.reflection.ReflectionUtils;
-import br.com.mvp.util.MVPUtil;
 import br.com.mvp.view.ViewModelBinder;
 import br.com.mvp.view.annotation.View;
 /**
@@ -67,21 +65,13 @@ public class MVP<V extends JPanel, M> {
 	 * @throws Exception
 	 */
 	public Controller<V, M> createController(V jpanel, M modelInstance) throws Exception{
-		if (!MVPUtil.isProxiedClass(modelInstance.getClass())){
-			M instance = createInstance( (Class<M>) modelInstance.getClass());
-			ReflectionUtils.copyProperties(modelInstance, instance);
-			modelInstance = instance;
-		}
-		
-		ViewModelBinder vmb = new ViewModelBinder((Bind) modelInstance, jpanel);
+		ViewModelBinder vmb = new ViewModelBinder(modelInstance, jpanel);
 		List<Binding> bindingList = vmb.bind();
 		return new ControllerImpl<V, M>(jpanel, modelInstance, bindingList);
 			
 	}
 	
 	private <T> T createInstance(Class<T> modelClass) throws Exception {
-		return InstrumentatorFactory.create(modelClass)
-				.setupProxy()
-				.newInstance();
+		return ConstructorUtils.invokeConstructor(modelClass, new Object[]{});
 	}
 }

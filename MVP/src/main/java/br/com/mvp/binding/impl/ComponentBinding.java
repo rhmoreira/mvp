@@ -8,7 +8,8 @@ import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.MethodUtils;
 
 import br.com.mvp.binding.Binding;
-import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.reflection.ReflectionUtils;
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.ViewTable;
 import br.com.mvp.view.converter.Converter;
@@ -16,19 +17,17 @@ import br.com.mvp.view.converter.Converter;
 @SuppressWarnings("unchecked")
 public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements Binding {
 
-	protected Object modelInstance;
-	protected JPanel viewInstance;
+	private ViewModelBind bind;
 	protected FieldMatch fieldMatch;
 	protected VC component;
 	protected C converter;
 
-	public ComponentBinding(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch) throws Exception {
+	public ComponentBinding(ViewModelBind bind, FieldMatch fieldMatch) throws Exception {
 		super();
-		this.modelInstance = modelInstance;
-		this.viewInstance = viewInstance;
+		this.bind = bind;
 		this.fieldMatch = fieldMatch;
 		
-		component = ReflectionUtils.getFieldValue(viewInstance, fieldMatch.getViewField());
+		component = ReflectionUtils.getFieldValue(bind.getView(), fieldMatch.getViewField());
 		createConverter(fieldMatch.getModelAnnotation());
 	}
 	
@@ -48,18 +47,17 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 
 	@Override
 	public Object getView(){
-		return viewInstance;
+		return bind.getView();
 	}
 
 	@Override
 	public Object getModel(){
-		return modelInstance;
+		return bind.getModel();
 	}
 	
 	@Override
 	public void unbind() {
-		modelInstance = null;
-		viewInstance = null;
+		bind.unbind();
 		fieldMatch = null;
 		component = null;
 		converter = null;		
@@ -70,7 +68,7 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	}
 	
 	protected Object getModelValue() throws Exception{
-		Object fieldValue = ReflectionUtils.getFieldValue(modelInstance, fieldMatch.getModelField());
+		Object fieldValue = ReflectionUtils.getFieldValue(bind.getModel(), fieldMatch.getModelField());
 		if (converter != null)
 			return ((Converter<Object, Object>)converter).fromModel(fieldValue);
 		else
@@ -80,15 +78,15 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	protected void setModelValue(Object value) throws Exception{
 		if (converter != null)
 			value = ((Converter<Object, Object>)converter).fromView(value);
-		ReflectionUtils.setFieldValue(modelInstance, value, fieldMatch.getModelField());
+		ReflectionUtils.setFieldValue(bind.getModel(), value, fieldMatch.getModelField());
 	}
 
 	public Object getModelInstance() {
-		return modelInstance;
+		return bind.getModel();
 	}
 
 	public JPanel getViewInstance() {
-		return viewInstance;
+		return bind.getView();
 	}
 
 	public FieldMatch getFieldMatch() {

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 
-import br.com.mvp.instrument.reflection.ReflectionUtils;
+import br.com.mvp.reflection.ReflectionUtils;
 import br.com.mvp.view.annotation.Model;
 
 public class ViewModelFieldMatcher {

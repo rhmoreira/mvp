@@ -3,16 +3,16 @@ package br.com.mvp.binding.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import br.com.mvp.view.ViewModelBinder.ViewModelBind;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.converter.Converter;
 
 public class RadioActionListener extends Listener<Converter<Object, String>> implements ActionListener {
 
-	public RadioActionListener(Object modelInstance, JPanel viewInstance, FieldMatch fieldMatch, Converter<Object, String> converter) {
-		super(modelInstance, viewInstance, fieldMatch, converter);
+	public RadioActionListener(ViewModelBind bind, FieldMatch fieldMatch, Converter<Object, String> converter) {
+		super(bind, fieldMatch, converter);
 	}
 
 	@Override

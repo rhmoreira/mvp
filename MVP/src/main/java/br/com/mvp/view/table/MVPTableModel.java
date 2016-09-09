@@ -1,7 +1,6 @@
 package br.com.mvp.view.table;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -59,7 +58,7 @@ public class MVPTableModel<M> extends DefaultTableModel {
 				 .forEach(m -> { addRowInternal(m); });
 	}
 	
-	public void addRowInternal(M modelData) {
+	private void addRowInternal(M modelData) {
 		int columns = mapper.getMappers().size();
 		Vector<Object> rowData = new Vector<>(columns);
 		for (int i = 0; i < columns; i++)
@@ -99,18 +98,11 @@ public class MVPTableModel<M> extends DefaultTableModel {
 		columnMapper.getValueResolver().setColumnValue(m, aValue);
 	}
 	
-	@Override
 	public void removeRow(int row) {
-		super.removeRow(row);
 		modelList.remove(row);
+		super.removeRow(row);
 	}
 	
-	public void removeRows(int[] rows) {
-		Arrays
-			.stream(rows)
-			.forEach(row -> removeRow(row));
-	}
-
 	public List<M> getModelList() {
 		return modelList;
 	}

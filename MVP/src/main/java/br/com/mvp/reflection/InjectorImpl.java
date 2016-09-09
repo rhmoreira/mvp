@@ -1,15 +1,15 @@
-package br.com.mvp.instrument.reflection;
+package br.com.mvp.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.mvp.instrument.Instrumentator;
-import br.com.mvp.instrument.InstrumentatorFactory;
-import br.com.mvp.util.MVPUtil;
+import org.apache.commons.beanutils.ConstructorUtils;
 
 class InjectorImpl implements Injector {
+	
+	private static final Object[] ARGS = {};
 
 	@Override
 	public void inject(Object target, Object value, Method setter) throws Exception {
@@ -25,7 +25,7 @@ class InjectorImpl implements Injector {
 	public void inject(Object target, Map<Field, Class<?>> dependencyMap, MemberHandler memberHandler) throws Exception {
 		Map<Class<?>, Object> instanceCacheL1 = new HashMap<>();
 		
-		instanceCacheL1.put(MVPUtil.getProxiedClass(target), target);
+		instanceCacheL1.put(target.getClass(), target);
 		
 		dependencyMap
 			.entrySet()
@@ -34,8 +34,7 @@ class InjectorImpl implements Injector {
 				try{
 					Object dependencyInstance = instanceCacheL1.get(entry.getValue());
 					if (dependencyInstance == null){
-						Instrumentator<?> instrumentator = InstrumentatorFactory.create(entry.getValue());
-						dependencyInstance = instrumentator.setupProxy().newInstance();
+						dependencyInstance = ConstructorUtils.invokeConstructor(entry.getValue(), ARGS);
 						instanceCacheL1.put(entry.getValue(), dependencyInstance);
 					}
 					inject(target, dependencyInstance, entry.getKey());

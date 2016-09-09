@@ -1,6 +1,6 @@
-package br.com.mvp.model;
+package br.com.mvp.view;
 
-import br.com.mvp.instrument.reflection.ClassHandler;
+import br.com.mvp.reflection.ClassHandler;
 
 public class ModelClassHandler extends ClassHandler{
 
