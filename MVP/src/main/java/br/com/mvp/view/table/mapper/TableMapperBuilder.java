@@ -18,7 +18,7 @@ public class TableMapperBuilder<T> {
 	
 	public TableMapperBuilder<T> addColumn(String columnName, boolean editable, ColumnValueResolver<T> valueResolver){
 		ColumnMapper<T> cm = new ColumnMapperImpl<>(currentColumnIndex, columnName, editable, valueResolver);
-		currentColumnIndex = tableMapper.addMapper(cm);
+		currentColumnIndex = tableMapper.addColumnMapper(cm);
 		return this;
 	}
 	

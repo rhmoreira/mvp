@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.MethodUtils;
 import br.com.mvp.binding.Binding;
 import br.com.mvp.instrument.reflection.ReflectionUtils;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
+import br.com.mvp.view.annotation.ViewTable;
 import br.com.mvp.view.converter.Converter;
 
 @SuppressWarnings("unchecked")
@@ -32,9 +33,11 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	}
 	
 	private void createConverter(Annotation a) throws Exception{
-		final Object[] args = new Object[]{};
-		Class<C> converterClass =  (Class<C>) MethodUtils.invokeMethod(a, "converter", args);
-		converter = ConstructorUtils.invokeConstructor(converterClass, args);
+		if ( !(a instanceof ViewTable) ){
+			final Object[] args = new Object[]{};
+			Class<C> converterClass =  (Class<C>) MethodUtils.invokeMethod(a, "converter", args);
+			converter = ConstructorUtils.invokeConstructor(converterClass, args);
+		}
 	}
 	
 	public final void finallyBind() throws Exception{
@@ -68,11 +71,15 @@ public abstract class ComponentBinding<VC, C extends Converter<?, ?>> implements
 	
 	protected Object getModelValue() throws Exception{
 		Object fieldValue = ReflectionUtils.getFieldValue(modelInstance, fieldMatch.getModelField());
-		return ((Converter<Object, Object>)converter).fromModel(fieldValue);
+		if (converter != null)
+			return ((Converter<Object, Object>)converter).fromModel(fieldValue);
+		else
+			return fieldValue;
 	}
 	
 	protected void setModelValue(Object value) throws Exception{
-		value = ((Converter<Object, Object>)converter).fromView(value);
+		if (converter != null)
+			value = ((Converter<Object, Object>)converter).fromView(value);
 		ReflectionUtils.setFieldValue(modelInstance, value, fieldMatch.getModelField());
 	}
 

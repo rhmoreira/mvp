@@ -16,7 +16,7 @@ class TableMapperImpl<T> implements TableMapper<T> {
 		return mappers;
 	}
 	
-	int addMapper(ColumnMapper<T> mapper){
+	int addColumnMapper(ColumnMapper<T> mapper){
 		mappers.add(mapper);
 		mappersMap.put(mapper.getColumnName(), mapper);
 		return mappers.size();

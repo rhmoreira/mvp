@@ -13,6 +13,7 @@ import br.com.mvp.binding.impl.ComboBinding;
 import br.com.mvp.binding.impl.ComponentBinding;
 import br.com.mvp.binding.impl.ListBinding;
 import br.com.mvp.binding.impl.RadioBinding;
+import br.com.mvp.binding.impl.TableBinding;
 import br.com.mvp.binding.impl.TextBinding;
 import br.com.mvp.view.ViewModelFieldMatcher.FieldMatch;
 import br.com.mvp.view.annotation.Checkbox;
@@ -20,6 +21,7 @@ import br.com.mvp.view.annotation.Combo;
 import br.com.mvp.view.annotation.Radio;
 import br.com.mvp.view.annotation.Text;
 import br.com.mvp.view.annotation.ViewList;
+import br.com.mvp.view.annotation.ViewTable;
 
 public final class ComponentBindingFactory {
 
@@ -31,6 +33,7 @@ public final class ComponentBindingFactory {
 		annotationBindingMap.put(ViewList.class, ListBinding.class);
 		annotationBindingMap.put(Radio.class, RadioBinding.class);
 		annotationBindingMap.put(Text.class, TextBinding.class);
+		annotationBindingMap.put(ViewTable.class, TableBinding.class);
 	}
 	
 	private ComponentBindingFactory() {}

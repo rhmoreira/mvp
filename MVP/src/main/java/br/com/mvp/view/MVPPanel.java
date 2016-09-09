@@ -3,6 +3,8 @@ package br.com.mvp.view;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -31,10 +33,18 @@ public abstract class MVPPanel<V extends JPanel, M> extends JPanel{
 	private boolean ready;
 	private DelayedAction delayedAction;
 	
-	public MVPPanel(Class<M> modelClass) {
-		this.modelClass = modelClass;
+	public MVPPanel() {
+		extractParametrizedModelClass();
 	}
 	
+	private void extractParametrizedModelClass() {
+		try{
+			Type genericBaseEntity = getClass().getGenericSuperclass();
+			this.modelClass = (Class<M>) ((ParameterizedType)genericBaseEntity).getActualTypeArguments()[1];
+		}catch (Exception e) {
+		}
+	}
+
 	/**
 	 * Creates a wrapper for the real controller. The real controller is only injected after the panel's construction is completely finished.
 	 * If not ready, any call to a controller instance method will throw an exception.

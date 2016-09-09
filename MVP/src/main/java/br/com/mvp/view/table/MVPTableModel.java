@@ -1,18 +1,19 @@
 package br.com.mvp.view.table;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
 import br.com.mvp.view.table.mapper.ColumnMapper;
-import br.com.mvp.view.table.mapper.ColumnValueResolver;
 import br.com.mvp.view.table.mapper.TableMapper;
 
 public class MVPTableModel<M> extends DefaultTableModel {
 
+	private static final long serialVersionUID = 5328879409260042766L;
+	
 	private List<M> modelList;
 	private TableMapper<M> mapper;
 	
@@ -20,19 +21,27 @@ public class MVPTableModel<M> extends DefaultTableModel {
 		this.mapper = mapper;
 		this.modelList = new ArrayList<>();
 		
-		update();
+		refresh();
 	}
 	
 	public MVPTableModel(TableMapper<M> mapper, List<M> modelList) {
 		this.mapper = mapper;
 		this.modelList = new ArrayList<>(modelList);
 		
-		update();
+		refresh();
 	}
 
-	public void update() {
+	private void refresh() {
 		updateColumns(mapper.getMappers().size());
-		updateData();		
+		updateData();
+		
+		fireTableDataChanged();
+	}
+	
+	private void removeAll(){
+		getDataVector().clear();
+		
+		fireTableDataChanged();
 	}
 	
 	private void updateColumns(int columns){
@@ -47,17 +56,25 @@ public class MVPTableModel<M> extends DefaultTableModel {
 	
 	private void updateData(){
 		modelList.stream()
-				 .forEach(m -> { addRow(m); });
+				 .forEach(m -> { addRowInternal(m); });
 	}
 	
-	public void addRow(M modelData) {
+	public void addRowInternal(M modelData) {
 		int columns = mapper.getMappers().size();
 		Vector<Object> rowData = new Vector<>(columns);
 		for (int i = 0; i < columns; i++)
 			rowData.add(i, mapper.getColumnMapper(i).getValueResolver().getColumnValue(modelData));
 		
 		super.addRow(rowData);
+	}
+	
+	public void addRow(M modelData) {
 		modelList.add(modelData);
+		addRowInternal(modelData);
+	}
+	
+	public void addRows(List<M> modelData) {
+		modelData.stream().forEach(m -> addRow(m));
 	}
 	
 	@Override
@@ -67,14 +84,10 @@ public class MVPTableModel<M> extends DefaultTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
+		if (getRowCount() == 0)
+			return Object.class;
+		
 		return getValueAt(0, columnIndex).getClass();
-	}
-	
-	@Override
-	public Object getValueAt(int row, int column) {
-		M m = modelList.get(row);
-		ColumnMapper<M> columnMapper = mapper.getColumnMapper(column);
-		return columnMapper.getValueResolver().getColumnValue(m);
 	}
 	
 	@Override
@@ -85,9 +98,27 @@ public class MVPTableModel<M> extends DefaultTableModel {
 		ColumnMapper<M> columnMapper = mapper.getColumnMapper(column);
 		columnMapper.getValueResolver().setColumnValue(m, aValue);
 	}
+	
+	@Override
+	public void removeRow(int row) {
+		super.removeRow(row);
+		modelList.remove(row);
+	}
+	
+	public void removeRows(int[] rows) {
+		Arrays
+			.stream(rows)
+			.forEach(row -> removeRow(row));
+	}
 
-	public Collection<M> getModelList() {
+	public List<M> getModelList() {
 		return modelList;
+	}
+	
+	public void setModelList(List<M> newModels){
+		removeAll();
+		this.modelList = newModels;
+		refresh();
 	}
 	
 	public TableMapper<M> getMapper() {
