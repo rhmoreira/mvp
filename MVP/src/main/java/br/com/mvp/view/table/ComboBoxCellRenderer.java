@@ -2,6 +2,7 @@ package br.com.mvp.view.table;
 
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -12,6 +13,7 @@ public class ComboBoxCellRenderer implements TableCellRenderer {
 	
 	public ComboBoxCellRenderer(JComboBox<?> comboBox) {
 		this.comboBox = comboBox;
+		this.comboBox.setBorder(BorderFactory.createEmptyBorder(-2, 0, -2, 0));
 	}
 
 	@Override
