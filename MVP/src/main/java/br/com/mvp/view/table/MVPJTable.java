@@ -23,8 +23,6 @@ public class MVPJTable<M> extends JTable {
 
 	private static final long serialVersionUID = 4324396294056654135L;
 
-	private static final long serialVersionUID = 4324396294056654135L;
-
 	private String noRowsMessage;
 	
 	public MVPJTable(TableMapper<M> mapper) {
@@ -78,7 +76,6 @@ public class MVPJTable<M> extends JTable {
 		TableRowSorter<MVPTableModel<M>> rowSorter = (TableRowSorter<MVPTableModel<M>>) e.getSource();
 		MVPTableModel<M> model = rowSorter.getModel();
 		
-<<<<<<< HEAD
 		if (!rowSorter.getSortKeys().isEmpty()){
 			SortKey sortKey = rowSorter.getSortKeys().get(0);
 			List<M> modelList = model.getModelList();
@@ -115,33 +112,6 @@ public class MVPJTable<M> extends JTable {
 	      g2d.drawString(noRowsMessage,10,20);
 	    }
 	  }
-=======
-		SortKey sortKey = rowSorter.getSortKeys().get(0);
-		List<M> modelList = model.getModelList();
-		
-		TableMapper<M> mapper = model.getMapper();
-		ColumnValueResolver<M> valueResolver = mapper
-				.getColumnMapper(sortKey.getColumn())
-				.getValueResolver();
-		
-		Comparator<M> c = (m1, m2) -> {
-			switch (sortKey.getSortOrder()) {
-			case ASCENDING:
-				return ((Comparable<Object>)valueResolver.getColumnValue(m1)).compareTo( 
-						(Comparable<Object>)valueResolver.getColumnValue(m2)
-						);
-			case DESCENDING:
-				return ((Comparable<Object>)valueResolver.getColumnValue(m2)).compareTo( 
-					(Comparable<Object>)valueResolver.getColumnValue(m1)
-					);
-			default:
-				return 0;
-			}
-		};
-		
-		modelList.sort(c);
-	}
->>>>>>> branch 'proxy' of https://github.com/rhmoreira/mvp
 	
 	@Override
 	public MVPTableModel<M> getModel() {
