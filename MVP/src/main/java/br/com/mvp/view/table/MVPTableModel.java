@@ -59,7 +59,13 @@ public class MVPTableModel<M> extends DefaultTableModel {
 				 .forEach(m -> { addRowInternal(m); });
 	}
 	
+<<<<<<< HEAD
 	public void addRowInternal(M modelData) {
+=======
+	public void addRow(M modelData) {
+		modelList.add(modelData);
+		
+>>>>>>> branch 'proxy' of https://github.com/rhmoreira/mvp
 		int columns = mapper.getMappers().size();
 		Vector<Object> rowData = new Vector<>(columns);
 		for (int i = 0; i < columns; i++)
@@ -68,11 +74,14 @@ public class MVPTableModel<M> extends DefaultTableModel {
 		super.addRow(rowData);
 	}
 	
+<<<<<<< HEAD
 	public void addRow(M modelData) {
 		modelList.add(modelData);
 		addRowInternal(modelData);
 	}
 	
+=======
+>>>>>>> branch 'proxy' of https://github.com/rhmoreira/mvp
 	public void addRows(List<M> modelData) {
 		modelData.stream().forEach(m -> addRow(m));
 	}
