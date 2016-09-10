@@ -1,5 +1,10 @@
 package br.com.mvp.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @SuppressWarnings("unchecked")
@@ -44,6 +49,25 @@ public class MVPUtil {
 				number = number.divide(BigDecimal.TEN);
 		
 		return number;
+	}
+	
+	public static <T extends Serializable> T copyObject(T obj) {
+		try{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(obj);
+			
+			oos.close();
+			byte[] serObj = baos.toByteArray();
+			
+			ByteArrayInputStream bais = new ByteArrayInputStream(serObj);
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			
+			return (T) ois.readObject();
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 }
