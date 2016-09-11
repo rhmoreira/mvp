@@ -1,6 +1,7 @@
 package br.com.mvp.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,18 +20,33 @@ public class JListUtil<V> {
 		listModel = (DefaultListModel<V>) jList.getModel();
 	}
 
-	public void addValues(Set<V> values){
-		Set<V> currentValues = getValues();;
-		listModel.removeAllElements();
-		currentValues.addAll(values);
-		
-		for (V v: currentValues)
-			listModel.addElement(v);
-		
+	public void addValues(int startIndex, Collection<V> values){
+		for (V v: values){
+			if (!listModel.contains(v)){
+				listModel.add(startIndex++, v);
+			}
+		}
+	}
+	
+	public void setValues(int startIndex, Collection<V> values){
+		for (V v: values){
+			if (!listModel.contains(v))
+				if (listModel.size() == startIndex)
+					listModel.setSize(listModel.size() + 1);
+				listModel.set(startIndex++, v);
+		}
+	}
+	
+	public void addValues(Collection<V> values){
+		addValues(listModel.size(), values);
 	}
 	
 	public void addValues(V[] values){
-		addValues(new LinkedHashSet<>(Arrays.asList(values)));
+		addValues(listModel.size(), values);
+	}
+	
+	public void addValues(int startIndex, V[] values){
+		addValues(startIndex, new LinkedHashSet<>(Arrays.asList(values)));
 	}
 	
 	public void removeValues(Set<V> values){
