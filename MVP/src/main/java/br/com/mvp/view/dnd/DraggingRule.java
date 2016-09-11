@@ -1,13 +1,24 @@
 package br.com.mvp.view.dnd;
 
 import java.awt.datatransfer.DataFlavor;
+import java.io.Serializable;
 
 import javax.swing.TransferHandler.TransferSupport;
 
-public interface DraggingRule {
+public interface DraggingRule extends Serializable {
 
 	boolean isFlavorSupported(TransferSupport support);
 	boolean isFlavorSupported(DataFlavor flavor);
 	boolean isDroppingLocationSupported(TransferSupport support);
-	DataFlavor[] getFlavors();
+	
+	default DataFlavor[] getFlavors(){
+		try{
+			DataFlavor[] TREE_NODE_DATAFLAVOR = {
+					new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + 
+							";class=" + TransferData.class.getName())};
+			return TREE_NODE_DATAFLAVOR;
+		}catch (Exception e) {
+			return null;
+		}
+	}
 }

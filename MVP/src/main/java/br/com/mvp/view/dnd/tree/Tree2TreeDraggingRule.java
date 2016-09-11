@@ -1,4 +1,4 @@
-package br.com.mvp.view.tree;
+package br.com.mvp.view.dnd.tree;
 
 import java.awt.datatransfer.DataFlavor;
 
@@ -12,22 +12,12 @@ import br.com.mvp.view.dnd.DraggingRule;
 
 public class Tree2TreeDraggingRule implements DraggingRule {
 	
-	private DataFlavor[] TREE_NODE_DATAFLAVOR = new DataFlavor[1];
-	
-	public Tree2TreeDraggingRule() {
-		try{
-			TREE_NODE_DATAFLAVOR[0] = 
-					new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + 
-							";class=" + TreePart.class.getName());
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+	private static final long serialVersionUID = -2032817379458183541L;
+
 	@Override
 	public boolean isFlavorSupported(TransferSupport support) {
 		boolean supports = false;
-		for (DataFlavor df: TREE_NODE_DATAFLAVOR)
+		for (DataFlavor df: getFlavors())
 			supports = supports || support.isDataFlavorSupported(df);
 		return supports;
 	}
@@ -40,7 +30,6 @@ public class Tree2TreeDraggingRule implements DraggingRule {
 			if (path == null)
 				return false;
 			
-			
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
 			return !node.isLeaf();					
 		}else
@@ -48,14 +37,9 @@ public class Tree2TreeDraggingRule implements DraggingRule {
 	}
 	
 	@Override
-	public DataFlavor[] getFlavors() {
-		return TREE_NODE_DATAFLAVOR;
-	}
-
-	@Override
 	public boolean isFlavorSupported(DataFlavor flavor) {
 		boolean supports = false;
-		for (DataFlavor df: TREE_NODE_DATAFLAVOR)
+		for (DataFlavor df: getFlavors())
 			supports = supports || df.equals(flavor);
 		return supports;
 	}

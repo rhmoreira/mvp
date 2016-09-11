@@ -1,4 +1,4 @@
-package br.com.mvp.view.tree;
+package br.com.mvp.view.dnd.tree;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -31,7 +31,7 @@ public class Tree2TreeTransferHandler extends TransferHandler {
 	
 	@Override
 	public int getSourceActions(JComponent c) {
-		return Tree2TreeTransferHandler.MOVE;
+		return Tree2TreeTransferHandler.COPY_OR_MOVE;
 	}
 
 	@Override
