@@ -7,6 +7,12 @@ import javax.swing.TransferHandler.TransferSupport;
 public class DefaultDragginRule implements DraggingRule {
 
 	private static final long serialVersionUID = -217168025006506294L;
+	
+	private static final DraggingRule INSTANCE = new DefaultDragginRule();
+	
+	public static DraggingRule instance(){
+		return INSTANCE;
+	}
 
 	@Override
 	public boolean isFlavorSupported(TransferSupport support) {

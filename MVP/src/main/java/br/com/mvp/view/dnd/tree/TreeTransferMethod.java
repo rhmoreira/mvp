@@ -6,7 +6,7 @@ public enum TreeTransferMethod {
 
 	LEAFS_ONLY,
 	NODES_ONLY,
-	NODES_AND_CHILDREN,
+	NODES_AND_LEAFS,
 	;
 	
 	public boolean accept(MutableTreeNode node){
@@ -15,7 +15,7 @@ public enum TreeTransferMethod {
 			return node.isLeaf();
 		case NODES_ONLY:
 			return !node.isLeaf();
-		case NODES_AND_CHILDREN:
+		case NODES_AND_LEAFS:
 			return true;
 		default:
 			return false;

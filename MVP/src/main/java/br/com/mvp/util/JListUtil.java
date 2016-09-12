@@ -21,11 +21,8 @@ public class JListUtil<V> {
 	}
 
 	public void addValues(int startIndex, Collection<V> values){
-		for (V v: values){
-			if (!listModel.contains(v)){
-				listModel.add(startIndex++, v);
-			}
-		}
+		for (V v: values)
+			addValue(startIndex++, v);
 	}
 	
 	public void setValues(int startIndex, Collection<V> values){
@@ -47,6 +44,24 @@ public class JListUtil<V> {
 	
 	public void addValues(int startIndex, V[] values){
 		addValues(startIndex, new LinkedHashSet<>(Arrays.asList(values)));
+	}
+	
+	public void addValue(int startIndex, V v){
+		if (!listModel.contains(v))
+			listModel.add(startIndex, v);
+	}
+	
+	public void addValue(V v){
+		addValue(listModel.size(), v);
+	}
+	
+	public void setValue(int startIndex, V v){
+		if (!listModel.contains(v))
+			listModel.set(startIndex, v);
+	}
+	
+	public void setValue(V v){
+		setValue(listModel.size(), v);
 	}
 	
 	public void removeValues(Set<V> values){

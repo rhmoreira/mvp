@@ -8,20 +8,22 @@ import br.com.mvp.view.dnd.DragSource;
 import br.com.mvp.view.dnd.DraggingRule;
 import br.com.mvp.view.dnd.DropDestination;
 
-public class JListDragAndDropSupport<T> extends ComponentDragAndDropSupport<JList<T>> {
+public class JListDragAndDropSupport<T> implements ComponentDragAndDropSupport<JList<T>> {
+
+	private static final long serialVersionUID = 998732210369698999L;
 
 	public JListDragAndDropSupport() {
 	}
 	
 	public DragSource<JList<T>> createSource(){
-		return new JListDragSource<T>();
+		return new JListDragSource<T>(DefaultDragginRule.instance());
 	}
 	
 	public DropDestination<JList<T>> createDestination(){
-		return new JListDropDestination<T>();
+		return new JListDropDestination<T>(DefaultDragginRule.instance());
 	}
 	
 	public DraggingRule createRule(){
-		return new DefaultDragginRule();
+		return DefaultDragginRule.instance();
 	}
 }

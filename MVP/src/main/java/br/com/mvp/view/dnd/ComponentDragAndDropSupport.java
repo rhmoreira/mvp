@@ -1,10 +1,12 @@
 package br.com.mvp.view.dnd;
 
+import java.io.Serializable;
+
 import javax.swing.JComponent;
 
-public abstract class ComponentDragAndDropSupport<T extends JComponent> {
+public interface ComponentDragAndDropSupport<T extends JComponent> extends Serializable{
 
-	public abstract DragSource<T> createSource();
-	public abstract DropDestination<T> createDestination();
-	public abstract DraggingRule createRule();
+	DragSource<T> createSource();
+	DropDestination<T> createDestination();
+	DraggingRule createRule();
 }

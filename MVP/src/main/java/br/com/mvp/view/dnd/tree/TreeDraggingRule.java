@@ -12,10 +12,10 @@ class TreeDraggingRule extends DefaultDragginRule {
 	
 	private static final long serialVersionUID = -2032817379458183541L;
 	
-	private TreeTransferMethod method;
+	private TreeConfiguration conf;
 	
-	public TreeDraggingRule(TreeTransferMethod method) {
-		this.method = method;
+	public TreeDraggingRule(TreeConfiguration treeConfiguration) {
+		this.conf = treeConfiguration;
 	}
 
 	@Override
@@ -27,7 +27,11 @@ class TreeDraggingRule extends DefaultDragginRule {
 				return false;
 			
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-			return method.accept(node);					
+			if (node.isRoot() && !conf.isRootAccess())
+				return false;
+			else
+				return conf.getMethod().accept(node)
+						&& (conf.getMaxDepth() == -1 ? true : node.getLevel() == conf.getMaxDepth());
 		}else
 			return false;
 	}

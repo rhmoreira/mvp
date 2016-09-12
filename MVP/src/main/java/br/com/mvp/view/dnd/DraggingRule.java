@@ -13,7 +13,7 @@ public interface DraggingRule extends Serializable {
 	
 	default DataFlavor[] getFlavors(){
 		try{
-			final DataFlavor[] TREE_NODE_DATAFLAVOR = {
+			DataFlavor[] TREE_NODE_DATAFLAVOR = {
 					new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + 
 							";class=" + TransferData.class.getName())};
 			return TREE_NODE_DATAFLAVOR;

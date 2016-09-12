@@ -8,6 +8,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import br.com.mvp.view.dnd.DragSource;
+import br.com.mvp.view.dnd.DraggingRule;
 import br.com.mvp.view.dnd.TransferData;
 
 class JTreeDragSource implements DragSource<JTree>{
@@ -15,9 +16,11 @@ class JTreeDragSource implements DragSource<JTree>{
 	private static final long serialVersionUID = 8255284463833775744L;
 	
 	private TreeTransferMethod method;
+	private DraggingRule rule;
 	
-	public JTreeDragSource(TreeTransferMethod method) {
+	public JTreeDragSource(TreeTransferMethod method, DraggingRule rule) {
 		this.method = method;
+		this.rule = rule;
 	}
 
 	@Override
@@ -43,7 +46,7 @@ class JTreeDragSource implements DragSource<JTree>{
 	}
 	
 	private void addChildrenByMethod(TreeTransferData data, DefaultMutableTreeNode node){
-		if (method == TreeTransferMethod.NODES_AND_CHILDREN){
+		if (method == TreeTransferMethod.NODES_AND_LEAFS){
 			data.setChildren(new ArrayList<>());
 			for (int i = 0; i < node.getChildCount(); i++){
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
@@ -53,4 +56,10 @@ class JTreeDragSource implements DragSource<JTree>{
 			}
 		}
 	}
+	
+	@Override
+	public DraggingRule getRule() {
+		return rule;
+	}
+	
 }

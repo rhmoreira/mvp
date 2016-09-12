@@ -5,7 +5,6 @@ import java.util.List;
 import br.com.mvp.view.dnd.AbstractTransferData;
 
 public class TreeTransferData extends AbstractTransferData{
-
 	private static final long serialVersionUID = 8328374803913842210L;
 	
 	private List<TreeTransferData> children	;

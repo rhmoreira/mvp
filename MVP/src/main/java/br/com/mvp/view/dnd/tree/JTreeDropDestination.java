@@ -5,6 +5,7 @@ import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import br.com.mvp.view.dnd.DraggingRule;
 import br.com.mvp.view.dnd.DropDestination;
 import br.com.mvp.view.dnd.TransferData;
 
@@ -13,9 +14,11 @@ class JTreeDropDestination implements DropDestination<JTree> {
 	private static final long serialVersionUID = -864163629272306113L;
 
 	private TreeTransferMethod method;
+	private DraggingRule rule;
 	
-	public JTreeDropDestination(TreeTransferMethod method) {
+	public JTreeDropDestination(TreeTransferMethod method, DraggingRule rule) {
 		this.method = method;
+		this.rule = rule;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ class JTreeDropDestination implements DropDestination<JTree> {
 	}
 	
 	private void insertNodeByMethod(DefaultTreeModel treeModel, DefaultMutableTreeNode parent, TransferData transferData, int childIndex) {
-		if (method == TreeTransferMethod.NODES_AND_CHILDREN 
+		if (method == TreeTransferMethod.NODES_AND_LEAFS 
 				&& transferData instanceof TreeTransferData){
 			TreeTransferData treeTransferData = (TreeTransferData) transferData;
 			
@@ -63,4 +66,8 @@ class JTreeDropDestination implements DropDestination<JTree> {
 		return null;
 	}
 
+	@Override
+	public DraggingRule getRule() {
+		return rule;
+	}
 }
