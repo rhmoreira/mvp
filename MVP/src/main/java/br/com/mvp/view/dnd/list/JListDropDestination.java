@@ -9,13 +9,16 @@ import br.com.mvp.view.dnd.DraggingRule;
 import br.com.mvp.view.dnd.DropDestination;
 import br.com.mvp.view.dnd.TransferData;
 import br.com.mvp.view.dnd.TransferSubDataExtractor;
+import br.com.mvp.view.dnd.configuration.ElementFilter;
 
 class JListDropDestination<T> implements DropDestination<JList<T>> {
 
 	private static final long serialVersionUID = 2559633666990432544L;
 	private DraggingRule rule;
+	private JListConfiguration<T> conf;	
 	
-	public JListDropDestination(DraggingRule rule) {
+	public JListDropDestination(JListConfiguration<T> conf, DraggingRule rule) {
+		this.conf = conf;
 		this.rule = rule;
 	}
 
@@ -26,14 +29,20 @@ class JListDropDestination<T> implements DropDestination<JList<T>> {
 		
 		JListUtil<T> jUtil = new JListUtil<>(jList);
 		
+		ElementFilter<T> filter = conf.getDestFilter();
+		
 		for (TransferData transfer: data){
-			if (!dropLocation.isInsert())
-				jUtil.setValue(index++, (T) transfer.getData());
-			else
-				jUtil.addValue(index++, (T) transfer.getData());
+			T t = (T) transfer.getData();
+			if (filter.accept(t)){
+				if (!dropLocation.isInsert())
+					jUtil.setValue(index++, t);
+				else
+					jUtil.addValue(index++, t);
+			}
 			
 			for (TransferData subTransfer: TransferSubDataExtractor.extract(transfer))
-				jUtil.addValue(index++, (T) subTransfer.getData());
+				if (filter.accept((T) subTransfer.getData()))
+					jUtil.addValue(index++, (T) subTransfer.getData());
 		}
 		
 	}

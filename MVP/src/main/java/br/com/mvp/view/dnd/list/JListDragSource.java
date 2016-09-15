@@ -13,8 +13,10 @@ class JListDragSource<T> implements DragSource<JList<T>> {
 
 	private static final long serialVersionUID = -4132321973108470887L;
 	private DraggingRule rule;
+	private JListConfiguration<T> conf;
 
-	public JListDragSource(DraggingRule rule) {
+	public JListDragSource(JListConfiguration<T> conf, DraggingRule rule) {
+		this.conf = conf;
 		this.rule = rule;
 	}
 	
@@ -23,18 +25,27 @@ class JListDragSource<T> implements DragSource<JList<T>> {
 		JListUtil<T> jUtil = new JListUtil<>(jList);
 		
 		Set<T> selectedElements = jUtil.getSelectedElements();
-		if(selectedElements.isEmpty())
-			return null;
-		else
-			return selectedElements
+		TransferData[] transferData = 
+				selectedElements
 					.stream()
+					.filter(t -> conf.getSourceFilter().accept(t) )
 					.map(o -> new ListTransferData(o))
 					.toArray(size -> new TransferData[size]);
+
+		if(transferData.length == 0)
+			return null;
+		else
+			return transferData;
 	}
 	
 	@Override
 	public DraggingRule getRule() {
 		return rule;
+	}
+	
+	@Override
+	public void dataTransfered(JList<T> jList) {
+		
 	}
 
 }

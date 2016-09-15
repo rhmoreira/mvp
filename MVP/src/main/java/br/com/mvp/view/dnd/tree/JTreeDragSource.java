@@ -15,11 +15,11 @@ class JTreeDragSource implements DragSource<JTree>{
 	
 	private static final long serialVersionUID = 8255284463833775744L;
 	
-	private TreeTransferMethod method;
+	private TreeConfiguration conf;
 	private DraggingRule rule;
 	
-	public JTreeDragSource(TreeTransferMethod method, DraggingRule rule) {
-		this.method = method;
+	public JTreeDragSource(TreeConfiguration conf, DraggingRule rule) {
+		this.conf = conf;
 		this.rule = rule;
 	}
 
@@ -32,10 +32,12 @@ class JTreeDragSource implements DragSource<JTree>{
 		
 		for (TreePath path: treePaths){
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-			if (method.accept(node)){
-				TreeTransferData transferData = new TreeTransferData(node.getUserObject());
-				nodes.add(transferData);
-				addChildrenByMethod(transferData, node);
+			if (conf.getMethod().accept(node)){
+				if (conf.getSourceFilter().accept(node.getUserObject())){
+					TreeTransferData transferData = new TreeTransferData(node.getUserObject());
+					nodes.add(transferData);
+					addChildrenByTransferMethod(transferData, node);
+				}
 			}
 		}
 			
@@ -45,14 +47,14 @@ class JTreeDragSource implements DragSource<JTree>{
 			return nodes.toArray(new TransferData[nodes.size()]);
 	}
 	
-	private void addChildrenByMethod(TreeTransferData data, DefaultMutableTreeNode node){
-		if (method == TreeTransferMethod.NODES_AND_LEAFS){
+	private void addChildrenByTransferMethod(TreeTransferData data, DefaultMutableTreeNode node){
+		if (conf.getMethod() == TreeTransferMethod.NODES_AND_LEAFS){
 			data.setChildren(new ArrayList<>());
 			for (int i = 0; i < node.getChildCount(); i++){
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
 				TreeTransferData childData = new TreeTransferData(child.getUserObject());
 				data.getChildren().add(childData);
-				addChildrenByMethod(childData, child);
+				addChildrenByTransferMethod(childData, child);
 			}
 		}
 	}
@@ -60,6 +62,11 @@ class JTreeDragSource implements DragSource<JTree>{
 	@Override
 	public DraggingRule getRule() {
 		return rule;
+	}
+
+	@Override
+	public void dataTransfered(JTree component) {
+		
 	}
 	
 }

@@ -1,6 +1,9 @@
 package br.com.mvp.view.dnd.tree;
 
-public class TreeConfiguration {
+import br.com.mvp.view.dnd.configuration.DnDConfiguration;
+import br.com.mvp.view.dnd.configuration.ElementFilter;
+
+public class TreeConfiguration extends DnDConfiguration<Object>{
 
 	private TreeTransferMethod method;
 	private boolean rootAccess;
@@ -19,22 +22,13 @@ public class TreeConfiguration {
 	TreeTransferMethod getMethod() {
 		return method;
 	}
-	void setMethod(TreeTransferMethod method) {
-		this.method = method;
-	}
 	boolean isRootAccess() {
 		return rootAccess;
-	}
-	void setRootAccess(boolean rootAccess) {
-		this.rootAccess = rootAccess;
 	}
 	int getMaxDepth() {
 		return maxDepth;
 	}
-	void setMaxDepth(int maxDepth) {
-		this.maxDepth = maxDepth;
-	}
-	
+		
 	public TreeConfiguration method(TreeTransferMethod method){
 		this.method = method;
 		return this;
@@ -47,6 +41,18 @@ public class TreeConfiguration {
 	
 	public TreeConfiguration rootAccessible(boolean access){
 		this.rootAccess = access;
+		return this;
+	}
+
+	@Override
+	public TreeConfiguration sourceFilter(ElementFilter<Object> filter) {
+		super.sourceFilter(filter);
+		return this;
+	}
+
+	@Override
+	public TreeConfiguration destFilter(ElementFilter<Object> filter) {
+		super.destFilter(filter);
 		return this;
 	}
 	

@@ -76,6 +76,11 @@ class DnDTransferHandler<S extends JComponent, D extends JComponent> extends Tra
 		}
 	}
 	
+	@Override
+	protected void exportDone(JComponent component, Transferable data, int action) {
+		source.dataTransfered((S) component);
+	}
+	
 	public class DnDTransferable implements Transferable, Serializable{
 		
 		private static final long serialVersionUID = 849943366639025520L;

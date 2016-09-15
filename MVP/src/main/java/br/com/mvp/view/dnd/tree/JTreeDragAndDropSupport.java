@@ -4,7 +4,6 @@ import javax.swing.JTree;
 
 import br.com.mvp.view.dnd.ComponentDragAndDropSupport;
 import br.com.mvp.view.dnd.DragSource;
-import br.com.mvp.view.dnd.DraggingRule;
 import br.com.mvp.view.dnd.DropDestination;
 
 public class JTreeDragAndDropSupport implements ComponentDragAndDropSupport<JTree> {
@@ -35,28 +34,17 @@ public class JTreeDragAndDropSupport implements ComponentDragAndDropSupport<JTre
 		return createDestination(conf);
 	}
 	
-	public DraggingRule createRule(){
-		return createRule(conf);
-	}
-	
 	/**
 	 * Creates a <code>DragSource</code> and overrides the default <code>TreeTransferMethod</code> or the one supplied in the constructor 
 	 */
 	public DragSource<JTree> createSource(TreeConfiguration treeConfiguration){
-		return new JTreeDragSource(treeConfiguration.getMethod(), rule);
+		return new JTreeDragSource(treeConfiguration, rule);
 	}
 	
 	/**
 	 * Creates a <code>DropDestination</code> and overrides the default <code>TreeTransferMethod</code> or the one supplied in the constructor 
 	 */
 	public DropDestination<JTree> createDestination(TreeConfiguration treeConfiguration){
-		return new JTreeDropDestination(treeConfiguration.getMethod(), rule);
-	}
-	
-	/**
-	 * Overrides the default <code>TreeTransferMethod</code> or the one supplied in the constructor 
-	 */
-	public DraggingRule createRule(TreeConfiguration treeConfiguration){
-		return rule;
+		return new JTreeDropDestination(treeConfiguration, rule);
 	}
 }

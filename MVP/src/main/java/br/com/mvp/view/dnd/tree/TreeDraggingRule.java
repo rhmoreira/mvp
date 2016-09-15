@@ -31,7 +31,8 @@ class TreeDraggingRule extends DefaultDragginRule {
 				return false;
 			else
 				return conf.getMethod().accept(node)
-						&& (conf.getMaxDepth() == -1 ? true : node.getLevel() == conf.getMaxDepth());
+						&& (conf.getMaxDepth() == -1 ? true : node.getLevel() == conf.getMaxDepth())
+						&& conf.getDestFilter().accept(node.getUserObject());
 		}else
 			return false;
 	}

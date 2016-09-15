@@ -8,5 +8,4 @@ public interface ComponentDragAndDropSupport<T extends JComponent> extends Seria
 
 	DragSource<T> createSource();
 	DropDestination<T> createDestination();
-	DraggingRule createRule();
 }

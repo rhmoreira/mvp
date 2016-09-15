@@ -8,4 +8,5 @@ public interface DragSource<C extends JComponent> extends Serializable {
 
 	TransferData[] createTransferData(C component);
 	DraggingRule getRule();
+	void dataTransfered(C component);
 }

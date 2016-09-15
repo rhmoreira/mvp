@@ -13,11 +13,11 @@ class JTreeDropDestination implements DropDestination<JTree> {
 	
 	private static final long serialVersionUID = -864163629272306113L;
 
-	private TreeTransferMethod method;
+	private TreeConfiguration conf;
 	private DraggingRule rule;
 	
-	public JTreeDropDestination(TreeTransferMethod method, DraggingRule rule) {
-		this.method = method;
+	public JTreeDropDestination(TreeConfiguration treeConfiguration, DraggingRule rule) {
+		this.conf = treeConfiguration;
 		this.rule = rule;
 	}
 
@@ -33,6 +33,9 @@ class JTreeDropDestination implements DropDestination<JTree> {
         for (TransferData transferData: transferDataArray){
         	DefaultMutableTreeNode child = getChildIfExists(transferData.getData(), node);
         	if (child == null) {
+        		if (!conf.getDestFilter().accept(transferData.getData()))
+        			continue;
+        		
         		child = new DefaultMutableTreeNode(transferData.getData());
 				treeModel.insertNodeInto(child, node, childIndex++);
 			}
@@ -42,13 +45,15 @@ class JTreeDropDestination implements DropDestination<JTree> {
 	}
 	
 	private void insertNodeByMethod(DefaultTreeModel treeModel, DefaultMutableTreeNode parent, TransferData transferData, int childIndex) {
-		if (method == TreeTransferMethod.NODES_AND_LEAFS 
+		if (conf.getMethod() == TreeTransferMethod.NODES_AND_LEAFS 
 				&& transferData instanceof TreeTransferData){
 			TreeTransferData treeTransferData = (TreeTransferData) transferData;
 			
 			if (treeTransferData.hasChildren()){
 				int i = 0;
 				for (TreeTransferData childData: treeTransferData.getChildren()){
+					if (!conf.getDestFilter().accept(transferData.getData()))
+						continue;
 					DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(childData.getData());
 					treeModel.insertNodeInto(childNode, parent, i++);
 					insertNodeByMethod(treeModel, childNode, childData, childIndex);
