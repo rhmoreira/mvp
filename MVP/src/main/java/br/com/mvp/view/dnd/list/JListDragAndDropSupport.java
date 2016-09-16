@@ -17,7 +17,7 @@ public class JListDragAndDropSupport<T> implements ComponentDragAndDropSupport<J
 		this(new JListConfiguration<>());
 	}
 	
-	public JListDragAndDropSupport(JListConfiguration<T> configuration) {
+	private JListDragAndDropSupport(JListConfiguration<T> configuration) {
 		this.conf = configuration;
 	}
 	
@@ -27,5 +27,9 @@ public class JListDragAndDropSupport<T> implements ComponentDragAndDropSupport<J
 	
 	public DropDestination<JList<T>> createDestination(){
 		return new JListDropDestination<T>(conf, DefaultDragginRule.instance());
+	}
+	
+	public JListConfiguration<T> getConfiguration(){
+		return conf;
 	}
 }

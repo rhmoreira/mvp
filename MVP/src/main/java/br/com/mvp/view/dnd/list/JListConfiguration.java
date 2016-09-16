@@ -5,6 +5,9 @@ import br.com.mvp.view.dnd.configuration.ElementFilter;
 
 public class JListConfiguration<T> extends DnDConfiguration<T> {
 
+	protected JListConfiguration() {
+	}
+	
 	@Override
 	public JListConfiguration<T> sourceFilter(ElementFilter<T> filter) {
 		super.sourceFilter(filter);
